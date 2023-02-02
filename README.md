@@ -1,8 +1,6 @@
-# MF2T/T2M #
+# MIDI to TEXT #
 
-Two programs to manipulate standard midifiles.
-
-This is a revival of these programs that I wrote starting in 1991, for the Atari ST (32-bit), MS-DOS (16-bit) and later Unix (probably 32-bits).
+This is a revival of the programs mf2t and t2mf that I wrote starting in 1991, for the Atari ST (32-bit), MS-DOS (16-bit) and later Unix (probably 32-bits).
 
 I recently picked this up again after some people asked me for executables for modern Windows (presumably 32- or 64-bit). I use a Mac, so I needed newer versions, for 64-bit OS's (in my case MacOS Ventura).
 
@@ -14,9 +12,17 @@ This repository contains as far as possible the history of the source code, but,
 
 All the text files have been converted to Unix format, using UTF-8 when ASCII isn't sufficient. If you need Windows format, please convert them yourselves.
 
+## List of contributors ##
+
+**NOTE:** Probably several email addresses are out of date.
+
+
+  * Tim Thompson, <me@timthompson.com> Original midi library. He has written a lot of MIDI software and compositions. See <https://timthompson.com/tjt/>.
+  * Michael Czeiszperger <michael@czei.org> added writing capabilities to the midi library
+
 -------------------------------------------------------------------------------
 
 Pieter van Oostrum\
-(formarly Piet)\
+(formerly Piet van Oostrum)\
 email: pieter@vanoostrum.org\
 www: <https://pieter.vanoostrum.org>
