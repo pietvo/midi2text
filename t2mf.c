@@ -298,7 +298,7 @@ static int mywritetrack()
 		break;
 		
             case SEQNR:
-		get16val ("SeqNr");
+		get16val ();
 		mf_w_meta_event (delta, sequence_number, data, 2L);
 		break;
 
@@ -440,7 +440,7 @@ static void splitval()
 
 static void get16val()
 {
-    if (yylex() != VAL || yylex() != INT) syntax();
+    if (yylex() != INT) syntax();
     if (yyval < 0 || yyval > 65535)
 	error ("Value must be between 0 and 65535");
     data[0] = (yyval>>8)&0xff;
