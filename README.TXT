@@ -11,17 +11,11 @@ into a midifile.
 Please report any problems, suggestion for improvement, or actual
 improvements to:
 
-Piet van Oostrum, Dept of Computer Science, Utrecht University,
-P.O. Box 80.089, 2508 TB Utrecht, The Netherlands
-email: piet@cs.ruu.nl
+Pieter van Oostrum
+email: pieter@vanoostrum.org
+www: https://pieter.vanoostrum.org
 
 -----------------------------------------------------------------------
-You can do with this program what you like, but if you think it is
-useful I would appreciate if you send me some of your midifiles. Not
-ones that I can find on the Internet. And only PD ones. Please send
-them uu- or btoa-encoded. Zoo and Arc archives (encoded) are also OK,
-Zip and Lharc may be problematic.
-------------------------------------------------------------------------
 
 The text representation is chosen such that it is easily recognized and
 manipulated by programs like sed, awk or perl. Yet it is also humanly
@@ -32,7 +26,7 @@ powerful programs or even a Fortran program :=). Or you can write
 algorithmic compositions using a familiar programming language.
 
 The programs use the midifile library written by Tim Thompson
-(tjt@blink.att.com) and updated by Michael Czeiszperger (mike@pan.com).
+<me@timthompson.com> and updated by Michael Czeiszperger <michael@czei.org>.
 However, there were some bugs in the write code and I added some
 features that I needed. I also changes some of the names to cope with
 the 7-character limit for external identifiers in the Sozobon

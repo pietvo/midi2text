@@ -5,11 +5,11 @@
  * Read and write a MIDI file.  Externally-assigned function pointers are 
  * called upon recognizing things in the file.
  *
- * Original release by Tim Thompson, tjt@twitch.att.com
+ * Original release by Tim Thompson, <me@timthompson.com>.
  *
- * June 1989 - Added writing capability, M. Czeiszperger.
+ * June 1989 - Added writing capability, M. Czeiszperger <michael@czei.org>.
  *
- * Oct 1991 - Modifications by Piet van Oostrum <piet@cs.ruu.nl>:
+ * Oct 1991 - Modifications by Pieter van Oostrum <pieter@vanoostrum.org>:
  *	Changed identifiers to be 7 char unique.
  *	Added sysex write capability (mf_w_sysex_event)
  *	Corrected a bug in writing of tempo track
@@ -17,15 +17,15 @@
  *	Added check for meta end of track insertion
  *	Added a couple of include files to get proper int=short compilation
  *
- * Nov 1991 - Piet van Oostrum <piet@cs.ruu.nl>
+ * Nov 1991 - Pieter van Oostrum <pieter@vanoostrum.org>
  *	mf_w_tempo needs a delta time parameter otherwise the tempo cannot
  *      be changed during the piece.
  *
- * Apr 1993 - Piet van Oostrum <piet@cs.ruu.nl>
+ * Apr 1993 - Pieter van Oostrum <pieter@vanoostrum.org>
  *	decl of malloc replaced by #include <malloc.h>
  *	readheader() declared void.
  *
- * Aug 1993 - Piet van Oostrum <piet@cs.ruu.nl>
+ * Aug 1993 - Pieter van Oostrum <pieter@vanoostrum.org>
  *	sequencer_specific in midifile.h was wrong
  *
  *          The file format implemented here is called
