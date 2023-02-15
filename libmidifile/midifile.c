@@ -112,19 +112,11 @@ static void badbyte(int c)
 
 static int egetc(void) /* read a single character and abort on EOF */
 {
-	
     int c = (*Mf_getc)();
 
-	//if (feof(stdin))
-	//OutputDebugStringA("%d",i++);
-	
-
-//    if (c == EOF)
-	if (feof(stdin))
+    if ((c == EOF) || feof(stdin))
         mferror("premature EOF");
- 
-	
-	Mf_toberead--;
+    Mf_toberead--;
     return(c);
 }
 
@@ -373,7 +365,7 @@ static int readmt(char *s) /* read through the “MThd” or “MTrk” header s
 {
     int n = 0;
     char *p = s;
-    int c;
+    int c = 0;
 
     while (n++<4 && (c=(*Mf_getc)()) != EOF) {
         if (c != *p++) {

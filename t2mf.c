@@ -147,7 +147,8 @@ static void checkchan()
 
 static void checknote()
 {
-    int c;
+    int c = 0;
+    
     if (yylex() != NOTE || ((c=yylex()) != INT && c != NOTEVAL))
         syntax();
     if (c == NOTEVAL) {
@@ -280,7 +281,7 @@ rescan:
                         while ((c=yytext[i++]) == ' ' || c == '\t' ||
                                 c == '\r' || c == '\n')
                             /* skip whitespace */;
-                            goto rescan; /* sorry EWD :=) */
+                        goto rescan; /* sorry EWD :=) */
                 }
             }
             buffer[buflen++] = c;

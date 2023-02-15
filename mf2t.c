@@ -125,7 +125,7 @@ static char *mknote(int pitch)
     static char *Notes[] =
         { "c", "c#", "d", "d#", "e", "f", "f#", "g",
           "g#", "a", "a#", "b" };
-    static char buf[5];
+    static char buf[20];
     if (notes)
         sprintf(buf, "%s%d", Notes[pitch % 12], pitch/12);
     else
@@ -375,8 +375,6 @@ int main(int argc, char **argv)
                 usage();
         }
     }
-
-	char * temp = argv[optind];
 
     if (optind < argc && !freopen(argv[optind++], "rb", stdin)) {
         fprintf(stderr, "freopen (%s): %s\n", argv[optind - 1],
