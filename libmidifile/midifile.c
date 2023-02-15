@@ -48,7 +48,9 @@
 #include <string.h>
 #include "midifile.h"
 
-#include "windows.h"
+#ifdef _WIN32
+  #include "windows.h"
+#endif
 
 #define NULLFUNC 0
 
