@@ -8,14 +8,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
-#include <io.h>
+#if defined _WIN32 || defined MSDOS
+  #include <io.h>
+  #include <fcntl.h>
+  #include "getopt.h"
+#else
+  #include <unistd.h>
+#endif
 #include <errno.h>
 #include <ctype.h>
 #include <setjmp.h>
 #include "t2mf.h"
 #include "version.h"
-//#include "getopt.h"
 
 
 extern int optind;
@@ -549,6 +553,9 @@ int main(int argc, char **argv)
                 strerror(errno));
         exit(1);
     }
+#if defined _WIN32 || defined MSDOS
+	setmode(fileno(stdout),O_BINARY);
+#endif
 
     initfuncs();
     TrkNr = 0;

@@ -8,14 +8,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
-#include <io.h>
+#if defined _WIN32 || defined MSDOS
+  #include <io.h>
+  #include <fcntl.h>
+  #include "getopt.h"
+#else
+  #include <unistd.h>
+#endif
 #include <errno.h>
 #include "midifile.h"
 #include "version.h"
-#include "getopt.h"
-
-
 
 static int TrkNr;
 static int TrksToDo = 1;
@@ -380,7 +382,10 @@ int main(int argc, char **argv)
         fprintf(stderr, "freopen (%s): %s\n", argv[optind - 1],
                 strerror(errno));
         exit(1);
-    }
+    } 
+#if defined _WIN32 || defined MSDOS
+	setmode(fileno(stdin),O_BINARY);
+#endif
 
     if (optind < argc && !freopen(argv[optind], "w", stdout)) {
         fprintf(stderr, "freopen (%s): %s\n", argv[optind],
