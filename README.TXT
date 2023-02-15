@@ -174,6 +174,7 @@ flex (t2mflex.c) is included for those that do not have flex.  The module
 yyread.c is a flex library module that you need on TOS (and on MSDOS).  The
 corresponding makefile is makefile.st. For Unix use makefile.unx. For
 Borland C on MSDOS use makefile.bcc. For Microsoft C on MSDOS makefile.msc.
+For Open Watcom C on MSDOS (or cross compile on Linux) use makefile.wcc.
 The makefiles may need minor changes for other systems.
 
 Useful hints:

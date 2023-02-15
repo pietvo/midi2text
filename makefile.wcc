@@ -1,0 +1,44 @@
+# makefile.bcc ie,
+# $Id: makefile.unx,v 1.3 1991/11/15 19:31:00 piet Rel $
+# with the assignment "CC=owcc"
+# plus other minor modifications
+
+CFLAGS = -0 -bt=dos -zq
+
+# If you have an old version of flex that defines yyleng
+# as a macro rather than a variable, uncomment the following line:
+# CFLAGS = -O -DNO_YYLENG_VAR
+# watcom c compiler
+CC=wcc
+LDFLAGS = -s
+
+SRCS =  mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
+       t2mf.fl t2mflex.c yyread.c \
+       README.TXT makefile.st makefile.unx makefile.bcc makefile.msc\
+       example1.mid example1.txt example2.mid example2.txt example3.mid \
+       example3.txt example4.mid example4.txt example5.mid example5.txt
+
+EXECS = mf2t.exe t2mf.exe
+
+all:	$(EXECS)
+
+.c.o:
+	$(CC) $(CFLAGS) $<
+
+t2mf.exe:	midifile.o t2mf.o t2mf.h t2mflex.o
+	wlink name t2mf.exe system dos file { t2mf.o midifile.o t2mflex.o }
+
+# t2mflex.c: t2mf.fl
+# 	flex -is -Ce t2mf.fl
+# 	ren lex.yy.c t2mflex.c
+
+t2mflex.o: t2mflex.c t2mf.h
+
+mf2t.exe:	midifile.o mf2t.o
+	wlink name mf2t.exe system dos file { mf2t.o midifile.o }
+
+clean:
+	rm *.o
+
+zip:	$(SRCS) $(EXECS)
+	zip -9 mf2t $(SRCS) $(EXECS)
