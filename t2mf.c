@@ -57,7 +57,7 @@ static void checkprog();
 static void checkeol();
 static void gethex();
 
-void error(char *s)
+void error(const char *s)
 {
     fprintf(stderr, "Error: %s\n", s);
 }
@@ -72,7 +72,7 @@ static void prs_error(char *s)
         fprintf(stderr, "*** %*s ***\n", yyleng, yytext);
     count = 0;
     /* skip rest of line */
-    while (count < 100 && (c=yylex()) != EOL && c != EOF) count++;
+    while (count < 100 && (c = yylex()) != EOL && c != EOF) count++;
     if (c == EOF) exit(1);
     if (err_cont)
         longjmp(erjump, 1);
@@ -133,8 +133,8 @@ static void translate(void)
     }
 }
 
-char data[5];
-int chan;
+static char data[5];
+static int chan;
 
 static void checkchan(void)
 {
@@ -340,6 +340,7 @@ static void mywritetrack(void)
         switch (yylex()) {
             case MTRK:
                 prs_error("Unexpected MTrk");
+                return;			/* PLB */
             case EOF:
                 err_cont = 0;
                 error("Unexpected EOF");
@@ -351,7 +352,8 @@ static void mywritetrack(void)
             case INT:
                 newtime = yyval;
                 if ((opcode=yylex())=='/') {
-                    if (yylex()!=INT) prs_error("Illegal time value");
+                    if (yylex() != INT)
+                        prs_error("Illegal time value");
                     newtime = (newtime-M0)*Measure+yyval;
                     if (yylex() != '/' || yylex() != INT)
                         prs_error("Illegal time value");
