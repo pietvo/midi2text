@@ -497,7 +497,6 @@ static int yy_more_len = 0;
 char *yytext;
 #line 1 "t2mf.fl"
 #define INITIAL 0
-/* $Id: t2mf.fl,v 1.3 1991/11/15 19:31:00 piet Rel $ */
 #line 4 "t2mf.fl"
 
 #include "t2mf.h"

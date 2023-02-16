@@ -1,4 +1,3 @@
-# $Id: makefile.st,v 1.3 1991/11/15 19:31:00 piet Rel $
 # Makefile for Atari ST with Sozobon C.
 # CP = cp
 

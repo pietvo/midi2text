@@ -1,4 +1,3 @@
-/* $Id: midifile.c,v 1.4 1991/11/17 21:57:26 piet Rel piet $ */
 /*
  * midifile 1.11
  * 

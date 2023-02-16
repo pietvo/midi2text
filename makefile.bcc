@@ -1,5 +1,4 @@
 # makefile.bcc ie,
-# $Id: makefile.unx,v 1.3 1991/11/15 19:31:00 piet Rel $
 # with the conversion of ".o" into ".obj", the assignment "CC=bcc"
 # plus other minor modifications
 

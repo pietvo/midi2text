@@ -1,4 +1,3 @@
-/* $Id: yyread.c,v 1.2 1991/11/03 21:53:20 piet Rel $ */
 /* sozobon version */
 
 #include <memory.h>

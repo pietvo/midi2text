@@ -15,7 +15,6 @@ extern "C" {
 #define MIDIFILE_PUBLIC
 #endif
 
-/* $Id: midifile.h,v 1.3 1991/11/03 21:50:50 piet Rel $ */
 /* definitions for MIDI file parsing code */
 MIDIFILE_PUBLIC extern int (*Mf_getc)();
 MIDIFILE_PUBLIC extern void (*Mf_header)();

@@ -1,7 +1,6 @@
 #ifndef T2MF_H
 #define T2MF_H
 
-/* $Id: t2mf.h,v 1.2 1991/11/03 21:50:50 piet Rel $ */
 #include "midifile.h"
 
 #define MTHD	256
