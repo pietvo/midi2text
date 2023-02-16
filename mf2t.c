@@ -160,13 +160,13 @@ static void mytrend(void)
     --TrksToDo;
 }
 
-static void mynon(int chan, int pitch, int vol)
+static void mynoteon(int chan, int pitch, int vol)
 {
     prtime();
     printf(Onmsg, chan+1, mknote(pitch), vol);
 }
 
-static void mynoff(int chan, int pitch, int vol)
+static void mynoteoff(int chan, int pitch, int vol)
 {
     prtime();
     printf(Offmsg, chan+1, mknote(pitch), vol);
@@ -305,8 +305,8 @@ static void initfuncs(void)
     Mf_header =  myheader;
     Mf_starttrack =  mytrstart;
     Mf_endtrack =  mytrend;
-    Mf_on =  mynon;
-    Mf_off =  mynoff;
+    Mf_on =  mynoteon;
+    Mf_off =  mynoteoff;
     Mf_pressure =  mypressure;
     Mf_parameter =  myparameter;
     Mf_pitchbend =  mypitchbend;

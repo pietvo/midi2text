@@ -62,7 +62,7 @@ void error(const char *s)
     fprintf(stderr, "Error: %s\n", s);
 }
 
-static void prs_error(char *s)
+static void parse_error(char *s)
 {
     int c;
     int count;
@@ -80,7 +80,7 @@ static void prs_error(char *s)
 
 static void syntax(void)
 {
-    prs_error("Syntax error");
+    parse_error("Syntax error");
 }
 
 static int getint(char *mess)
@@ -231,7 +231,7 @@ static void checkeol(void)
 {
     if (eol_seen) return;
     if (yylex() != EOL) {
-    	prs_error("Garbage deleted");
+    	parse_error("Garbage deleted");
         while (! eol_seen) yylex();	 /* skip rest of line */
     }
 }
@@ -272,7 +272,7 @@ rescan:
                         break;
                     case 'x':
                         if (sscanf(yytext+i, "%2x", &c) != 1)
-                            prs_error("Illegal \\x in string");
+                            parse_error("Illegal \\x in string");
                         i += 2;
                         break;
                     case '\r':
@@ -301,9 +301,9 @@ rescan:
             buffer[buflen++] = yyval;
             c = yylex();
         } while (c == INT);
-        if (c != EOL) prs_error("Unknown hex input");
+        if (c != EOL) parse_error("Unknown hex input");
     }
-    else prs_error("String or hex input expected");
+    else parse_error("String or hex input expected");
 }
 
 long bankno(char *s, int n)
@@ -332,14 +332,14 @@ static void mywritetrack(void)
  
     while ((opcode = yylex()) == EOL);
     if (opcode != MTRK)
-        prs_error("Missing MTrk");
+        parse_error("Missing MTrk");
     checkeol();
     while (1) {
         err_cont = 1;
         setjmp(erjump);
         switch (yylex()) {
             case MTRK:
-                prs_error("Unexpected MTrk");
+                parse_error("Unexpected MTrk");
                 return;			/* PLB */
             case EOF:
                 err_cont = 0;
@@ -353,10 +353,10 @@ static void mywritetrack(void)
                 newtime = yyval;
                 if ((opcode=yylex())=='/') {
                     if (yylex() != INT)
-                        prs_error("Illegal time value");
+                        parse_error("Illegal time value");
                     newtime = (newtime-M0)*Measure+yyval;
                     if (yylex() != '/' || yylex() != INT)
-                        prs_error("Illegal time value");
+                        parse_error("Illegal time value");
                     newtime = T0 + newtime*Beat + yyval;
                     opcode = yylex();
                 }
@@ -479,7 +479,7 @@ static void mywritetrack(void)
                                 type = yyval;
                                 break;
                             default:
-                                prs_error("Illegal Meta type");
+                                parse_error("Illegal Meta type");
                         }
                         if (type == end_of_track)
                             buflen = 0;
@@ -497,14 +497,14 @@ static void mywritetrack(void)
                         break;
 
                     default:
-                        prs_error("Unknown input");
+                        parse_error("Unknown input");
                         break;
                 }
                 currtime = newtime;
             case EOL:
                 break;
             default:
-                prs_error("Unknown input");
+                parse_error("Unknown input");
                 break;
         }
         checkeol();
