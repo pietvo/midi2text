@@ -542,15 +542,13 @@ int main(int argc, char **argv)
     }
 
     if (optind < argc && !freopen(argv[optind++], "r", stdin)) {
-        fprintf(stderr, "freopen (%s): %s\n", argv[optind - 1],
-                strerror(errno));
+        perror(argv[optind - 1]);
         exit(1);
     }
     yyin = stdin;
 
-    if (optind < argc && !freopen(argv[optind], "wb", stdout)) {
-        fprintf(stderr, "freopen (%s): %s\n", argv[optind],
-                strerror(errno));
+    if (optind < argc && !freopen(argv[optind], "w", stdout)) {
+	perror(argv[optind]);
         exit(1);
     }
 #if defined _WIN32 || defined MSDOS

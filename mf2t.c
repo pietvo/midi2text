@@ -376,8 +376,7 @@ int main(int argc, char **argv)
     }
 
     if (optind < argc && !freopen(argv[optind++], "rb", stdin)) {
-        fprintf(stderr, "freopen (%s): %s\n", argv[optind - 1],
-                strerror(errno));
+	perror(argv[optind - 1]);
         exit(1);
     } 
 #if defined _WIN32 || defined MSDOS
@@ -385,8 +384,7 @@ int main(int argc, char **argv)
 #endif
 
     if (optind < argc && !freopen(argv[optind], "w", stdout)) {
-        fprintf(stderr, "freopen (%s): %s\n", argv[optind],
-                strerror(errno));
+	perror(argv[optind]);
         exit(1);
     }
 
