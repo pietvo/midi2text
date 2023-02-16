@@ -548,14 +548,18 @@ int main(int argc, char **argv)
         }
     }
 
-    if (optind < argc && !freopen(argv[optind++], "r", stdin)) {
+    /* Filename "-" indicates stdin */
+    if (optind < argc && strcmp(argv[optind++], "-") != 0
+                      && !freopen(argv[optind - 1], "r", stdin)) {
         perror(argv[optind - 1]);
         exit(1);
     }
     yyin = stdin;
 
-    if (optind < argc && !freopen(argv[optind], "w", stdout)) {
-	perror(argv[optind]);
+    /* Filename "-" indicates stdout */
+    if (optind < argc && strcmp(argv[optind], "-") != 0
+                      && !freopen(argv[optind], "w", stdout)) {
+        perror(argv[optind]);
         exit(1);
     }
 #if defined _WIN32 || defined MSDOS

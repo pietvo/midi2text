@@ -375,16 +375,20 @@ int main(int argc, char **argv)
         }
     }
 
-    if (optind < argc && !freopen(argv[optind++], "rb", stdin)) {
-	perror(argv[optind - 1]);
+    /* Filename "-" indicates stdin */
+    if (optind < argc && strcmp(argv[optind++], "-") != 0
+                      && !freopen(argv[optind - 1], "rb", stdin)) {
+        perror(argv[optind - 1]);
         exit(1);
     } 
 #if defined _WIN32 || defined MSDOS
 	setmode(fileno(stdin),O_BINARY);
 #endif
 
-    if (optind < argc && !freopen(argv[optind], "w", stdout)) {
-	perror(argv[optind]);
+    /* Filename "-" indicates stdout */
+    if (optind < argc && strcmp(argv[optind], "-") != 0
+                      && !freopen(argv[optind], "w", stdout)) {
+        perror(argv[optind]);
         exit(1);
     }
 
