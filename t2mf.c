@@ -136,7 +136,7 @@ static void translate(void)
 char data[5];
 int chan;
 
-static void checkchan()
+static void checkchan(void)
 {
     if (yylex() != CH || yylex() != INT) syntax();
     if (yyval < 1 || yyval > 16)
@@ -144,7 +144,7 @@ static void checkchan()
     chan = yyval-1;
 }
 
-static void checknote()
+static void checknote(void)
 {
     int c = 0;
     
@@ -184,7 +184,7 @@ static void checknote()
     data[0] = yyval;
 }
 
-static void checkval()
+static void checkval(void)
 {
     if (yylex() != VAL || yylex() != INT) syntax();
     if (yyval < 0 || yyval > 127)
@@ -192,7 +192,7 @@ static void checkval()
     data[1] = yyval;
 }
 
-static void splitval()
+static void splitval(void)
 {
     if (yylex() != VAL || yylex() != INT) syntax();
     if (yyval < 0 || yyval > 16383)
@@ -201,7 +201,7 @@ static void splitval()
     data[1] = yyval/128;
 }
 
-static void get16val()
+static void get16val(void)
 {
     if (yylex() != INT) syntax();
     if (yyval < 0 || yyval > 65535)
@@ -210,7 +210,7 @@ static void get16val()
     data[1] = yyval&0xff;
 }
 
-static void checkcon()
+static void checkcon(void)
 {
     if (yylex() != CON || yylex() != INT)
         syntax();
@@ -219,7 +219,7 @@ static void checkcon()
     data[0] = yyval;
 }
 
-static void checkprog()
+static void checkprog(void)
 {
     if (yylex() != PROG || yylex() != INT) syntax();
     if (yyval < 0 || yyval > 127)
@@ -227,7 +227,7 @@ static void checkprog()
     data[0] = yyval;
 }
 
-static void checkeol()
+static void checkeol(void)
 {
     if (eol_seen) return;
     if (yylex() != EOL) {
@@ -236,7 +236,7 @@ static void checkeol()
     }
 }
 
-static void gethex()
+static void gethex(void)
 {
     int c;
     buflen = 0;
@@ -323,7 +323,7 @@ long bankno(char *s, int n)
     return res;
 }
 
-static void mywritetrack()
+static void mywritetrack(void)
 {
     int opcode, c;
     long currtime = 0;
