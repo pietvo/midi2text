@@ -1,4 +1,6 @@
-# makefile.unx
+# Makefile
+# This is the basic Makefile for Unix-like systems
+# It works for Linux and MacOS
 
 CFLAGS = -O
 # If you have an old version of flex that defines yyleng
@@ -7,12 +9,12 @@ CFLAGS = -O
 
 SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        t2mf.fl t2mflex.c yyread.c getopt.h version.h\
-       README.TXT makefile.st makefile.unx makefile.bcc makefile.msc makefile.wcc\
+       README.TXT Makefile makefile.st makefile.bcc makefile.msc makefile.wcc\
        example1.mid example1.txt example2.mid example2.txt example3.mid \
        example3.txt example4.mid example4.txt example5.mid example5.txt
 
 EXECS = mf2t t2mf
-       
+
 all:	$(EXECS)
 
 t2mf:	midifile.o t2mf.o t2mf.h t2mflex.o
