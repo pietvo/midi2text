@@ -1,5 +1,5 @@
-# makefile.bcc ie,
-# with the assignment "CC=owcc"
+# makefile.wcc ie,
+# with the assignment "CC=wcc"
 # plus other minor modifications
 
 CFLAGS = -0 -bt=dos -zq
