@@ -78,9 +78,14 @@ static void parse_error(char *s)
         longjmp(erjump, 1);
 }
 
-static void syntax(void)
+static void syntax(char* mess)
 {
-    parse_error("Syntax error");
+    /* 100 is enough for all our uses; no risk of buffer overflow */
+    char buffer[100];
+    (void)strcpy(buffer, "Syntax error - ");
+    (void)strcat(buffer, mess);
+    (void)strcat(buffer, " expected");
+    parse_error(buffer);
 }
 
 static int getint(char *mess)
@@ -138,7 +143,7 @@ static int chan;
 
 static void checkchan(void)
 {
-    if (yylex() != CH || yylex() != INT) syntax();
+    if (yylex() != CH || yylex() != INT) syntax("ch=");
     if (yyval < 1 || yyval > 16)
         error("Chan must be between 1 and 16");
     chan = yyval-1;
@@ -149,7 +154,7 @@ static void checknote(void)
     int c = 0;
     
     if (yylex() != NOTE || ((c=yylex()) != INT && c != NOTEVAL))
-        syntax();
+        syntax("n= or note= <note>");
     if (c == NOTEVAL) {
         static int notes[] = {
             9,   /* a */
@@ -186,7 +191,7 @@ static void checknote(void)
 
 static void checkval(void)
 {
-    if (yylex() != VAL || yylex() != INT) syntax();
+    if (yylex() != VAL || yylex() != INT) syntax("v= or vol= or val= <int>");
     if (yyval < 0 || yyval > 127)
         error("Value must be between 0 and 127");
     data[1] = yyval;
@@ -194,7 +199,7 @@ static void checkval(void)
 
 static void splitval(void)
 {
-    if (yylex() != VAL || yylex() != INT) syntax();
+    if (yylex() != VAL || yylex() != INT) syntax("v= or vol= or val= <int>");
     if (yyval < 0 || yyval > 16383)
         error("Value must be between 0 and 16383");
     data[0] = yyval%128;
@@ -203,7 +208,7 @@ static void splitval(void)
 
 static void get16val(void)
 {
-    if (yylex() != INT) syntax();
+    if (yylex() != INT) syntax("<int>");
     if (yyval < 0 || yyval > 65535)
         error("Value must be between 0 and 65535");
     data[0] = (yyval>>8)&0xff;
@@ -213,7 +218,7 @@ static void get16val(void)
 static void checkcon(void)
 {
     if (yylex() != CON || yylex() != INT)
-        syntax();
+        syntax("c= or con= <int>");
     if (yyval < 0 || yyval > 127)
         error("Controller must be between 0 and 127");
     data[0] = yyval;
@@ -221,7 +226,7 @@ static void checkcon(void)
 
 static void checkprog(void)
 {
-    if (yylex() != PROG || yylex() != INT) syntax();
+    if (yylex() != PROG || yylex() != INT) syntax("p= or prog= <int>");
     if (yyval < 0 || yyval > 127)
         error("Program number must be between 0 and 127");
     data[0] = yyval;
@@ -410,13 +415,13 @@ static void mywritetrack(void)
                         break;
 
                     case TEMPO:
-                        if (yylex() != INT) syntax();
+                        if (yylex() != INT) syntax("<int>");
                         mf_w_tempo(delta, yyval);
                         break;
 
                     case TIMESIG: {
                         int nn, denom, cc, bb;
-                        if (yylex() != INT || yylex() != '/') syntax();
+                        if (yylex() != INT || yylex() != '/') syntax("<int>/<int>");
                         nn = yyval;
                         denom = getbyte("Denom");
                         cc = getbyte("clocks per click");
@@ -448,7 +453,7 @@ static void mywritetrack(void)
                         if (i < -7 || i > 7)
                             error ("Key Sig must be between -7 and 7");
                         if ((c=yylex()) != MINOR && c != MAJOR)
-                            syntax();
+                            syntax("minor or major");
                         data[1] = (c == MINOR);
                         mf_w_meta_event(delta, key_signature,
                                 (unsigned char *)data, 2L);
