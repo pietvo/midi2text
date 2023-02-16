@@ -27,6 +27,7 @@ static long T0;
 
 static int fold = 0;		/* fold long lines */
 static int notes = 0;		/* print notes as a–g */
+static int on0_to_off = 0;   /* replace On vol=0 with Off */
 static int times = 0;		/* print times as Measure/beat/click */
 
 static char *Onmsg  = "On ch=%d n=%s v=%d\n";
@@ -160,16 +161,20 @@ static void mytrend(void)
     --TrksToDo;
 }
 
-static void mynoteon(int chan, int pitch, int vol)
-{
-    prtime();
-    printf(Onmsg, chan+1, mknote(pitch), vol);
-}
-
 static void mynoteoff(int chan, int pitch, int vol)
 {
     prtime();
     printf(Offmsg, chan+1, mknote(pitch), vol);
+}
+
+static void mynoteon(int chan, int pitch, int vol)
+{
+    if (on0_to_off && vol == 0) {
+        mynoteoff(chan, pitch, vol);
+        return;
+    }
+    prtime();
+    printf(Onmsg, chan+1, mknote(pitch), vol);
 }
 
 static void mypressure(int chan, int pitch, int press)
@@ -329,10 +334,11 @@ static void usage(void)
 {
     fprintf(stderr,
 "mf2t v%s\n"
-"Usage: mf2t [-mnbtv] [-f n] [midifile [textfile]]\n\n"
+"Usage: mf2t [-mnobtv] [-f n] [midifile [textfile]]\n\n"
 "Options:\n"
 "  -m      merge partial sysex into a single sysex message\n"
 "  -n      write notes in symbolic form\n"
+"  -o      replace Note On with vol=0 by Note Off\n"
 "  -b|-t   write event times as bar:beat:click\n"
 "  -v      use slightly more verbose output\n"
 "  -f n    fold long text and hex entries at n characters\n", VERSION);
@@ -344,13 +350,16 @@ int main(int argc, char **argv)
     int c;
 
     Mf_nomerge = 1;
-    while ((c = getopt(argc, argv, "mnbtvf:h")) != -1) {
+    while ((c = getopt(argc, argv, "mnobtvf:h")) != -1) {
         switch (c) {
             case 'm':
                 Mf_nomerge = 0;
                 break;
             case 'n':
                 notes++;
+                break;
+            case 'o':
+                on0_to_off = 1;
                 break;
             case 'b':
             case 't':
