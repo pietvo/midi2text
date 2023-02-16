@@ -7,6 +7,20 @@ writes an ASCII representation of it that is both compact and easily parsable.
 
 t2mf is the companion program that reparses the text representation
 into a midifile.
+
+NOTE: These program are command line programs, i.e. they are run from a
+Terminal (MacOS), a shell, terminal, xterm or similar (Linux), or from
+CMD.EXE, Powershell or similar on Windows. If you are not familiar with
+comaand line programs, please search on the internet how to do this for
+your particular Operating System.
+
+Later, I will release a graphical user interface for these programs for
+Windows, Linux and MacOS, especially for those people that have no or
+little experience with the command line.
+
+Binaries for various operating systems may be found at
+https://pieter.vanoostrum.org/midi2text
+
 -----------------------------------------------------------------------
 Please report any problems, suggestion for improvement, or actual
 improvements to:
@@ -29,22 +43,32 @@ The programs use the midifile library written by Tim Thompson
 <me@timthompson.com> and updated by Michael Czeiszperger <michael@czei.org>.
 However, there were some bugs in the write code and I added some
 features that I needed. I also changes some of the names to cope with
-the 7-character limit for external identifiers in the Sozobon
-compiler. I will make an updated version of the library available
-soon. I also anticipate to split the read and write portions.
+the 7-character limit for external identifiers in the Atari Sozobon
+compiler.
 
 Usage:
-	mf2t [-mntv] [-f[n]] [midifile [textfile]]
+	mf2t [-mnotv] [-f[n]] [midifile [textfile]]
 	
 	translate midifile to textfile.
+
+The parts between [...] indicate optional parts of the command. The
+options like -m and -n etc. can be given separately, or combined.
+
+For example: mf2t -m -n example1.mid example1.txt
+or: mf2t -mn example1.mid example1.txt
 	
-When textfile is not given, the text is written to standard output.
-When midifile is not given it is read from standard input. The meaning
-of the options is:
+When textfile is not given, the text is written to standard output, usually this means displayed on the scree, or processed in anothe program.
+When midifile is not given it is read from standard input. This is usually only useful when another program produces the midifile and then "pipes"" it through mf2t. e.g.
+midiproducer | mf2t ...
+
+A "-" as the first filename indicates that standard input is used for the input, and standard output for the second file.
+
+The meaning of the options is:
 
 -m	merge partial sysex into a single sysex message
 -n	write notes in symbolic rather than numeric form. A-C
 	optionally followed by # (sharp) followed by octave number.
+-o  replace Note On message with vol=0 by a Note Off message.
 -b	or
 -t	event times are written as bar:beat:click rather than a click number
 -v	use a slightly more verbose output
@@ -58,18 +82,15 @@ of the options is:
 When textfile is not given, text is read from standard input, when
 midifile is not given it is written to standard output.
 
+A "-" as the first filename indicates that standard input is used for the input, and standard output for the second file.
+
 -r	Use running status
-
-Note that if one file is given it is always the midifile. This is so
-that on systems like Unix you can write a pipeline:
-
-	mf2t x.mid | sed ... | t2mf y.mid
 	
 Format of the textfile:
 -----------------------
 
 The following representation of the midievents is generated (between
-[] the form when -v is used:
+[...] the form when -v is used:
 
 File header:		Mfile <format> <ntrks> <division>
 Start of track:		MTrk
