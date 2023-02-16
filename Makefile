@@ -10,8 +10,9 @@ CFLAGS = -O
 SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        t2mf.fl t2mflex.c yyread.c getopt.h version.h\
        README.TXT Makefile makefile.st makefile.bcc makefile.msc makefile.wcc\
-       example1.mid example1.txt example2.mid example2.txt example3.mid \
-       example3.txt example4.mid example4.txt example5.mid example5.txt
+       tests/example1.mid tests/example1.txt tests/example2.mid tests/example2.txt \
+       tests/example3.mid tests/example3.txt tests/example4.mid tests/example4.txt \
+       tests/example5.mid tests/example5.txt
 
 EXECS = mf2t t2mf
 
