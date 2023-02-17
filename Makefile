@@ -15,6 +15,7 @@ SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        tests/example5.mid tests/example5.txt
 
 EXECS = mf2t t2mf
+DOCS = README.TXT
 
 all:	$(EXECS)
 
@@ -35,11 +36,14 @@ mf2t:	midifile.o mf2t.o
 mf2t.o: mf2t.c getopt.h
 
 tar:	
-	tar cf mf2t.tar $(SRCS)
+	tar cf mf2t.tar $(SRCS) $(EXECS) $(DOCS)
 	compress mf2t.tar
 
-zip:	$(SRCS)
-	zip -9 mf2t $(SRCS)
+zip:	$(SRCS)  $(EXECS)
+	zip -9 mf2tsrc $(SRCS) $(EXECS)
+
+dist:	 $(EXECS) $(DOCS)
+	zip -9 mf2t $(EXECS) $(DOCS)
 
 clean:
-	rm mf2t t2mf *.o
+	rm -f mf2t t2mf *.o mf2tsrc.zip mf2t.zip
