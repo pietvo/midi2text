@@ -1,6 +1,9 @@
 # makefile.wcc ie,
 # with the assignment "CC=wcc"
 # plus other minor modifications
+# This was used to cross compile MS-DOS executables on Linux.
+# Cross compiler downloaded from http://openwatcom.org/ftp/install/open-watcom-c-linux-1.9 or
+# https://sourceforge.net/projects/openwatcom/files/open-watcom-1.9/open-watcom-c-linux-1.9/download
 
 CFLAGS = -0 -bt=dos -zq
 
