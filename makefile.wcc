@@ -21,6 +21,7 @@ SRCS =  mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        example3.txt example4.mid example4.txt example5.mid example5.txt
 
 EXECS = mf2t.exe t2mf.exe
+DOCS = README.TXT
 
 all:	$(EXECS)
 
@@ -44,3 +45,6 @@ clean:
 
 zip:	$(SRCS) $(EXECS)
 	zip -9 mf2t $(SRCS) $(EXECS)
+
+dist:	 $(EXECS) $(DOCS)
+	zip -9 mf2t-msdos $(EXECS) $(DOCS)
