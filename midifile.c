@@ -1,1 +1,1 @@
-/Users/pieter/Projects/midi2text/libmidifile/midifile.c
+libmidifile/midifile.c
