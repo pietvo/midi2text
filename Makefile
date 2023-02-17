@@ -39,8 +39,8 @@ tar:
 	tar cf mf2t.tar $(SRCS) $(EXECS) $(DOCS)
 	compress mf2t.tar
 
-zip:	$(SRCS)  $(EXECS)
-	zip -9 mf2tsrc $(SRCS) $(EXECS)
+zip:	$(SRCS)  $(EXECS) $(DOCS)
+	zip -9 mf2tsrc $(SRCS) $(EXECS) $(DOCS)
 
 dist:	 $(EXECS) $(DOCS)
 	zip -9 mf2t $(EXECS) $(DOCS)
