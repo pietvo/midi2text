@@ -3,9 +3,7 @@
 # It works for Linux and MacOS
 
 CFLAGS = -O
-# If you have an old version of flex that defines yyleng
-# as a macro rather than a variable, uncomment the following line:
-# CFLAGS = -O -DNO_YYLENG_VAR
+LDFLAGS =
 
 SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        t2mf.fl t2mflex.c yyread.c getopt.h version.h\
@@ -14,26 +12,38 @@ SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        tests/example3.mid tests/example3.txt tests/example4.mid tests/example4.txt \
        tests/example5.mid tests/example5.txt
 
-EXECS = mf2t t2mf
-DOCS = README.TXT
+DOCS = README
 
-all:	$(EXECS)
+LIBS = midifile.o
 
-t2mf:	midifile.o t2mf.o t2mf.h t2mflex.o
-	$(CC) t2mf.o midifile.o t2mflex.o -o t2mf
+MF2TPROG = mf2t
+MF2TOBJS = mf2t.o
 
-t2mf.o: t2mf.c t2mf.h getopt.h
+T2MFPROG = t2mf
+T2MFOBJS = t2mf.o t2mflex.o
+
+EXECS = $(MF2TPROG) $(T2MFPROG)
+OBJS = $(MF2TOBJS) $(T2MFOBJS)
+
+all: $(EXECS)
+
+$(MF2TPROG): $(MF2TOBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $(MF2TPROG) $(MF2TOBJS) $(LIBS)
+
+mf2t.o: midifile.h version.h getopt.h mf2t.c
+
+$(T2MFPROG): $(T2MFOBJS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $(T2MFPROG) $(T2MFOBJS) $(LIBS)
+
+t2mf.o: midifile.h version.h getopt.h t2mf.c
+
+midifile.o: midifile.h midifile.c
 
 #t2mflex.c: t2mf.fl
 #	flex -is -Ce t2mf.fl
 #	mv lex.yy.c t2mflex.c
 
 t2mflex.o: t2mflex.c t2mf.h
-
-mf2t:	midifile.o mf2t.o
-	$(CC) mf2t.o midifile.o -o mf2t
-
-mf2t.o: mf2t.c getopt.h
 
 tar:	
 	tar cf mf2t.tar $(SRCS) $(EXECS) $(DOCS)
@@ -46,4 +56,4 @@ dist:	 $(EXECS) $(DOCS)
 	zip -9 mf2t $(EXECS) $(DOCS)
 
 clean:
-	rm -f mf2t t2mf *.o mf2tsrc.zip mf2t.zip
+	rm -f $(EXECS) $(OBJS) $(LIBS) mf2tsrc.zip mf2t.zip
