@@ -1,0 +1,91 @@
+# makefile.mac
+# Makefile for MacOS
+# "make -f makefile.mac" makes universal (x86-64 + arm64) executables
+# "make -f makefile.mac mac-x86-64" makes universal x86-64 executables,
+# but they are called mf2t.x86_64 and t2mf.x86_64
+# "make -f makefile.mac mac-arm64" makes arm64 executables,
+# but they are called mf2t.arm64 and t2mf.arm64
+
+CC = clang
+CFLAGS = -O
+LDFLAGS =
+
+# get native arch
+ifeq ($(ARCH),)
+  ARCH:=$(shell uname -m)
+endif
+
+SRCS = mf2t.c t2mf.c t2mf.h t2mf.fl t2mflex.c yyread.c getopt.h version.h \
+	$(wildcard libmidifile/midifile.* libmidifile/Make*) libmidifile/README \
+     Makefile $(wildcard makefile.*) $(wildcard tests/*) 
+
+DOCS = README License
+
+LIBS = midifile.$(ARCH).o
+
+%.$(ARCH).o: %.c
+	$(CC) -arch $(ARCH) $(CFLAGS) -c -o $@ $^
+
+MF2TOBJS = mf2t.$(ARCH).o
+MF2TSRC_C = mf2t.c midifile.c
+MF2TSRC_H = version.h getopt.h midifile.h
+
+T2MFOBJS = t2mf.$(ARCH).o t2mflex.$(ARCH).o
+T2MFSRC_C = t2mf.c t2mflex.c midifile.c
+T2MFSRC_H = version.h getopt.h midifile.h t2mf.h
+
+EXECS = mf2t t2mf
+
+all: $(EXECS)
+
+mac-x86-64:
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 mf2t.x86_64 t2mf.x86_64
+	cp mf2t.x86_64 mf2t
+	cp t2mf.x86_64 t2mf
+
+mac-arm64:
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=arm64 mf2t.arm64 t2mf.arm64
+	cp mf2t.arm64 mf2t
+	cp t2mf.arm64 t2mf
+
+mf2t.$(ARCH):  $(MF2TOBJS) $(MF2TSRC_H) $(LIBS)
+	$(CC) -arch $(ARCH) $(LDFLAGS) $(MF2TOBJS) $(LIBS) -o mf2t.$(ARCH)
+
+t2mf.$(ARCH): $(T2MFOBJS) $(T2MFSRC_H) $(LIBS)
+	$(CC) -arch $(ARCH) $(LDFLAGS) $(T2MFOBJS) $(LIBS) -o t2mf.$(ARCH)
+
+mf2t:  mf2t.arm64 mf2t.x86_64
+	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=arm64 mf2t.arm64
+	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 mf2t.x86_64
+	lipo -create  mf2t.arm64 mf2t.x86_64 -output mf2t
+
+t2mf: t2mf.arm64 t2mf.x86_64
+	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=arm64 t2mf.arm64
+	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 t2mf.x86_64
+	lipo -create t2mf.arm64 t2mf.x86_64 -output t2mf
+
+#t2mflex.c: t2mf.fl
+#	flex -i -s -Ce -8 t2mf.fl
+#	mv lex.yy.c t2mflex.c
+
+source:
+	zip -9 mf2tsrc $(SRCS)
+
+dist:	 $(EXECS) $(DOCS)
+	zip -9 mf2t-macos $(EXECS) $(DOCS)
+
+dist-x86-64:	 mac-x86-64 $(DOCS)
+	zip -9 mf2t-macos-x86-64 $(EXECS) $(DOCS)
+
+dist-arm64:	 mac-arm64 $(DOCS)
+	zip -9 mf2t-macos-arm64 $(EXECS) $(DOCS)
+
+clean:
+	rm -f $(EXECS) *.o
+
+realclean:
+	rm -f $(EXECS) *.o mf2t mf2t.x86_64 mf2t.arm64 t2mf t2mf.x86_64 t2mf.arm64
