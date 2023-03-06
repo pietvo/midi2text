@@ -42,7 +42,7 @@ Some contributions have been superseded by later changes,
 
 -------------------------------------------------------------------------------
 
-Pieter van Oostrum\
-(formerly Piet van Oostrum)\
-email: pieter@vanoostrum.org\
+Pieter van Oostrum  
+(formerly Piet van Oostrum)  
+email: pieter@vanoostrum.org  
 www: <https://pieter.vanoostrum.org>
