@@ -36,6 +36,7 @@ static int Measure, M0, Beat, Clicks;
 static long T0;
 static char* buffer = 0;
 static int bufsiz = 0, buflen;
+static int on0_to_off = 0;   /* replace On vol=0 with Off or vv*/
 
 extern int yylex(void);
 extern long yyval;
@@ -373,6 +374,14 @@ static void mywritetrack(void)
                         checkchan();
                         checknote();
                         checkval();
+                        if (opcode == ON && on0_to_off > 0 && data[1] == 0) {
+                            /* replace ON with vol=0 by OFF */
+                            opcode = OFF;
+                        } else if (opcode == OFF && on0_to_off < 0) {
+                            /* replace OFF by ON with vol=0 */
+                            opcode = ON;
+                            data[1] = 0;
+                        }
                         mf_w_midi_event(delta, opcode, chan,
                                 (unsigned char *)data, 2L);
                         break;
@@ -526,8 +535,10 @@ static void usage(void)
 {
     fprintf(stderr,
 "t2mf v%s\n"
-"Usage: t2mf [-r] [textfile [midifile]]\n\n"
+"Usage: t2mf [-r] [-on|-off] [textfile [midifile]]\n\n"
 "Options:\n"
+"  -on     replace Note On with vol=0 by Note Off\n"
+"  -off    replace Note Off by Note On with vol=0\n"
 "  -r      use running status\n", VERSION);
     exit(1);
 }
@@ -536,10 +547,19 @@ int main(int argc, char **argv)
 {
     int c;
 
-    while ((c = getopt(argc, argv, "rh")) != -1) {
+    while ((c = getopt(argc, argv, "rho:")) != -1) {
         switch (c) {
             case 'r':
                 Mf_RunStat = 1;
+                break;
+            case 'o':
+                if (*optarg == 'n')
+                    on0_to_off = 1;
+                else if (*optarg == 'f')
+                    on0_to_off = -1;
+                else {
+                    fprintf(stderr, "illegal option -o%s\n", optarg);
+                }
                 break;
             case 'h':
             case '?':
