@@ -14,7 +14,7 @@ SRCS = mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        tests/example3.mid tests/example3.txt tests/example4.mid tests/example4.txt \
        tests/example5.mid tests/example5.txt
 
-DOCS = README.TXT
+DOCS = README.TXT LICENSE.TXT
 
 LIBS = midifile.o
 
@@ -49,6 +49,9 @@ t2mflex.o: t2mflex.c t2mf.h
 
 README.TXT: README
 	sed 's/$$/\r'/g < README > README.TXT
+
+LICENSE.TXT: License
+	sed 's/$$/\r'/g < License > LICENSE.TXT
 
 win32:
 	$(MAKE) -f $(MAKEFILE_LIST) clean

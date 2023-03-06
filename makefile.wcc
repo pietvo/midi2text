@@ -21,7 +21,7 @@ SRCS =  mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        example3.txt example4.mid example4.txt example5.mid example5.txt
 
 EXECS = mf2t.exe t2mf.exe
-DOCS = README.TXT
+DOCS = README.TXT LICENSE.TXT
 
 all:	$(EXECS)
 
@@ -39,6 +39,12 @@ t2mflex.o: t2mflex.c t2mf.h
 
 mf2t.exe:	midifile.o mf2t.o
 	wlink name mf2t.exe system dos file { mf2t.o midifile.o }
+
+README.TXT: README
+	sed 's/$$/\r'/g < $< > $@
+
+LICENSE.TXT: License
+	sed 's/$$/\r'/g < $< > $@
 
 clean:
 	rm -f mf2t.exe t2mf.exe *.o
