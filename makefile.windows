@@ -29,7 +29,7 @@ T2MFOBJS = t2mf.o t2mflex.o
 EXECS = $(MF2TPROG) $(T2MFPROG)
 OBJS = $(MF2TOBJS) $(T2MFOBJS)
 
-all: $(EXECS)
+all: $(EXECS) $(DOCS)
 
 $(MF2TPROG): $(MF2TOBJS) $(LIBS)
 	$(CC) $(LDFLAGS) -o $(MF2TPROG) $(MF2TOBJS) $(LIBS)
