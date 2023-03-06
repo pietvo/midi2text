@@ -1,4 +1,4 @@
-		MF2T/T2MF
+        MF2T/T2MF
 
 Two programs to manipulate standard midifiles.
 
@@ -47,94 +47,106 @@ the 7-character limit for external identifiers in the Atari Sozobon
 compiler.
 
 Usage:
-	mf2t [-mnotv] [-f[n]] [midifile [textfile]]
-	
-	translate midifile to textfile.
+    mf2t [-mnbtv] [-on|-off] [-f n] [midifile [textfile]]
+    
+    translate midifile to textfile.
 
 The parts between [...] indicate optional parts of the command. The
 options like -m and -n etc. can be given separately, or combined.
 
 For example: mf2t -m -n example1.mid example1.txt
 or: mf2t -mn example1.mid example1.txt
-	
-When textfile is not given, the text is written to standard output, usually this means displayed on the scree, or processed in anothe program.
-When midifile is not given it is read from standard input. This is usually only useful when another program produces the midifile and then "pipes"" it through mf2t. e.g.
+    
+When textfile is not given, the text is written to standard output,
+usually this means displayed on the screen, or processed in another
+program. When midifile is not given it is read from standard input. This
+is usually only useful when another program produces the midifile and
+then "pipes"" it through mf2t. e.g.
 midiproducer | mf2t ...
 
-A "-" as the first filename indicates that standard input is used for the input, and standard output for the second file.
+A "-" as the filename indicates that standard input is used for the
+first file, and standard output for the second file. You can put '--'
+between the options and the filenames, to prevent the filename being
+interpreted as an option.
 
 The meaning of the options is:
 
--m	merge partial sysex into a single sysex message
--n	write notes in symbolic rather than numeric form. A-C
-	optionally followed by # (sharp) followed by octave number.
--o  replace Note On message with vol=0 by a Note Off message.
--b	or
--t	event times are written as bar:beat:click rather than a click number
--v	use a slightly more verbose output
--f<n>	fold long text and hex entries into more lines <n>=line length
-	(default 80).
+-m    merge partial sysex into a single sysex message
+-n    write notes in symbolic rather than numeric form. A-C
+      optionally followed by # (sharp) followed by octave number
+-on   replace Note On with vol=0 by Note Off
+-off  replace Note Off by Note On with vol=0
+-b or
+-t    event times are written as bar:beat:click rather than a click number
+-v    use a slightly more verbose output
+-f<n> fold long text and hex entries into more lines <n>=line length
+    (default 80)
 
-	t2mf [-r] [[textfile] midifile]
-	
-	translate textfile to midifile.
-	
+    t2mf [-r] [-on|-off] [[textfile] midifile]
+    
+    translate textfile to midifile.
+    
 When textfile is not given, text is read from standard input, when
 midifile is not given it is written to standard output.
 
-A "-" as the first filename indicates that standard input is used for the input, and standard output for the second file.
+A "-" as the filename indicates that standard input is used for the
+first file, and standard output for the second file. You can put '--'
+between the options and the filenames, to prevent the filename being
+interpreted as an option.
 
--r	Use running status
-	
+-on   replace Note On with vol=0 by Note Off
+-off  replace Note Off by Note On with vol=0
+-r    use running status
+    
 Format of the textfile:
 -----------------------
 
 The following representation of the midievents is generated (between
 [...] the form when -v is used:
 
-File header:		Mfile <format> <ntrks> <division>
-Start of track:		MTrk
-End of track:		TrkEnd
+File header:        Mfile <format> <ntrks> <division>
+Start of track:     MTrk
+End of track:       TrkEnd
 
-Note On:		On <ch> <note> <vol>
-Note Off:		Off <ch> <note> <vol>
-Poly Pressure:		PoPr[PolyPr] <ch> <note> <val>
-Channel Pressure:	ChPr[ChanPr] <ch> <val>
-Controller parameter:	Par[Param] <ch> <con> <val>
-Pitch bend:		Pb <ch> <val>
-Program change:		PrCh[ProgCh] <ch> <prog>
-Sysex message:		SysEx <hex>
-Arbutrary midi bytes:	Arb <hex>
+Note On:        On <ch> <note> <vol>
+Note Off:       Off <ch> <note> <vol>
+Poly Pressure:      PoPr[PolyPr] <ch> <note> <val>
+Channel Pressure:   ChPr[ChanPr] <ch> <val>
+Controller parameter:   Par[Param] <ch> <con> <val>
+Pitch bend:     Pb <ch> <val>
+Program change:     PrCh[ProgCh] <ch> <prog>
+Sysex message:      SysEx <hex>
+Arbitrary midi bytes:   Arb <hex>
 
-Sequence nr:		Seqnr <num>
-Key signature:		KeySig <num> <manor>
-Tempo:			Tempo <num>
-Time signature:		TimeSig <num>/<num> <num> <num>
-SMPTE event:		SMPTE <num> <num> <num> <num> <num>
+Sequence nr:        Seqnr <num>
+Key signature:      KeySig <num> <manor>
+Tempo:              Tempo <num>
+Time signature:     TimeSig <num>/<num> <num> <num>
+SMPTE event:        SMPTE <num> <num> <num> <num> <num>
 
-Meta text events:	Meta <texttype> <string>
-Meta end of track:	Meta TrkEnd
-Sequencer specific:	SeqSpec <type> <hex>
-Misc meta events:	Meta <type> <hex>
+Meta text events:   Meta <texttype> <string>
+Meta end of track:  Meta TrkEnd
+Sequencer specific: SeqSpec <type> <hex>
+Misc meta events:   Meta <type> <hex>
 
 The <> have the following meaning:
 
-<ch>		ch=<num>
-<note>		n=<noteval>  [note=<noteval>]
-<vol>		v=<num> [vol=<num>]
-<val>		v=<num> [val=<num>]
-<con>		c=<num> [con=<num>]
-<prog>		p=<num> [prog=<num>]
-<manor>		minor or major
-<noteval>	either a <num> or A-G optionally followed by #,
-		followed by <num> without intermediate spaces.
+<ch>        ch=<num>
+<note>      n=<noteval>  [note=<noteval>]
+<vol>       v=<num> [vol=<num>]
+<val>       v=<num> [val=<num>]
+<con>       c=<num> [con=<num>]
+<prog>      p=<num> [prog=<num>]
+<manor>     minor or major
+<noteval>   either a <num> or A-G optionally followed by #,
+        followed by <num> without intermediate spaces.
 
-<texttype>	Text Copyright SeqName TrkName InstrName Lyric Marker Cue
-		or <type>
-<type>		a hex number of the form 0xab
-<hex>		a sequence of 2-digit hex numbers (without 0x)
-		separated by space
-<string>	a string between double quotes (like "text").
+<texttype>  Text Copyright SeqName TrkName InstrName Lyric Marker Cue
+        or <type>
+<type>      a hex number of the form 0xab
+<hex>       a sequence of 2-digit hex numbers (without 0x)
+        separated by space
+<string>    a string between double quotes (like "text").
 
 Channel numbers are 1-based, all other numbers are as they appear in
 the midifile.
@@ -219,23 +231,23 @@ on the track number.
 %drum = (62, 36, 63, 47, 65, 61, 67, 40, 68, 54);
 
 while (<>) {
-	next if /c=3/;
-	s/Off(.*)v=[0-9]*/On\1v=0/;
-	if (/ch=10/ && /n=([0-9]*)/ && $drum{$1}) {
-		s/n=$1/"n=".$drum{$1}/e;
-	}
-	if (/^MTrk/) {++$trknr ; print "track $trknr\n";}
-	if ($trknr > 2) { s/ch=1\b/ch=3/; }
-	else  { s/ch=1\b/ch=4/; }
-	print || die "Error: $!\n";
-}	
+    next if /c=3/;
+    s/Off(.*)v=[0-9]*/On\1v=0/;
+    if (/ch=10/ && /n=([0-9]*)/ && $drum{$1}) {
+        s/n=$1/"n=".$drum{$1}/e;
+    }
+    if (/^MTrk/) {++$trknr ; print "track $trknr\n";}
+    if ($trknr > 2) { s/ch=1\b/ch=3/; }
+    else  { s/ch=1\b/ch=4/; }
+    print || die "Error: $!\n";
+}   
 ------------------------------------------------------------------------
 
 and this is the corresponding awk script.
 
 ------------------------------- test.awk -------------------------------
 BEGIN { drum[62] = 36; drum[63] = 47; drum[65] = 61; \
-	drum[67] = 40; drum[68] = 54 }
+    drum[67] = 40; drum[68] = 54 }
 /c=3/ { next }
 ($2 == "Off") { $2 = "On"; $5 = "v=0" }
 /ch=10/ { n = substr($4, 3); if (n in drum) $4 = "n=" drum[n] }
