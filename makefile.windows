@@ -3,6 +3,8 @@
 # It uses the MingW cross compiler on MacOS, probably also works on Linux
 # CC = x86_64-w64-mingw32-gcc  64 bit
 # CC = i686-w64-mingw32-gcc	   32 bit
+# "make -f makefile.windows win32" makes mf2t-win32.zip
+# "make -f makefile.windows win64" makes mf2t-win64.zip
 
 CFLAGS = -O
 LDFLAGS =
