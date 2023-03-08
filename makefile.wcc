@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # makefile.wcc ie,
 # with the assignment "CC=wcc"
 # plus other minor modifications

@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # Makefile for Atari ST with Sozobon C.
 # CP = cp
 

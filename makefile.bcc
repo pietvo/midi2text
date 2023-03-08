@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # makefile.bcc ie,
 # with the conversion of ".o" into ".obj", the assignment "CC=bcc"
 # plus other minor modifications

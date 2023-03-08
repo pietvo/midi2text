@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # makefile.mac
 # Makefile for MacOS
 # "make -f makefile.mac" makes universal (x86-64 + arm64) executables

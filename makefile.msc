@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # makefile.msc ie,
 # with the conversion of ".o" into ".obj", the assignment "CC=cl"
 # plus other minor modifications

@@ -1,3 +1,4 @@
+# -*- mode: makefile; -*-
 # makefile.windows
 # This makes distribution packages for Windows-32 and Windows-64
 # It uses the MingW cross compiler on MacOS, probably also works on Linux
