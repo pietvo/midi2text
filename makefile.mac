@@ -1,11 +1,14 @@
 # -*- mode: makefile; -*-
 # makefile.mac
 # Makefile for MacOS
-# "make -f makefile.mac" makes universal (x86-64 + arm64) executables
-# "make -f makefile.mac mac-x86-64" makes universal x86-64 executables,
+# "make -f makefile.mac" makes universal (x86_64 + arm64) executables
+# "make -f makefile.mac mac-x86_64" makes universal x86_64 executables,
 # but they are called mf2t.x86_64 and t2mf.x86_64
 # "make -f makefile.mac mac-arm64" makes arm64 executables,
 # but they are called mf2t.arm64 and t2mf.arm64
+# "make -f makefile.mac dist" make a distribution zip file for MacOS universal
+# "make -f makefile.mac dist-x86_64" make a distribution zip file for MacOS x86_64
+# "make -f makefile.mac dist-arm64" make a distribution zip file for MacOS arm64
 
 CC = clang
 CFLAGS = -O
@@ -39,7 +42,7 @@ EXECS = mf2t t2mf
 
 all: $(EXECS)
 
-mac-x86-64:
+mac-x86_64:
 	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 mf2t.x86_64 t2mf.x86_64
 	cp mf2t.x86_64 mf2t
 	cp t2mf.x86_64 t2mf
@@ -55,17 +58,17 @@ mf2t.$(ARCH):  $(MF2TOBJS) $(MF2TSRC_H) $(LIBS)
 t2mf.$(ARCH): $(T2MFOBJS) $(T2MFSRC_H) $(LIBS)
 	$(CC) -arch $(ARCH) $(LDFLAGS) $(T2MFOBJS) $(LIBS) -o t2mf.$(ARCH)
 
-mf2t:  mf2t.arm64 mf2t.x86_64
-	$(MAKE) -f $(MAKEFILE_LIST) clean
+mf2t:  # mf2t.arm64 mf2t.x86_64
+	$(MAKE) -f $(MAKEFILE_LIST) objclean
 	$(MAKE) -f $(MAKEFILE_LIST) ARCH=arm64 mf2t.arm64
-	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) objclean
 	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 mf2t.x86_64
 	lipo -create  mf2t.arm64 mf2t.x86_64 -output mf2t
 
-t2mf: t2mf.arm64 t2mf.x86_64
-	$(MAKE) -f $(MAKEFILE_LIST) clean
+t2mf: # t2mf.arm64 t2mf.x86_64
+	$(MAKE) -f $(MAKEFILE_LIST) objclean
 	$(MAKE) -f $(MAKEFILE_LIST) ARCH=arm64 t2mf.arm64
-	$(MAKE) -f $(MAKEFILE_LIST) clean
+	$(MAKE) -f $(MAKEFILE_LIST) objclean
 	$(MAKE) -f $(MAKEFILE_LIST) ARCH=x86_64 t2mf.x86_64
 	lipo -create t2mf.arm64 t2mf.x86_64 -output t2mf
 
@@ -79,14 +82,14 @@ source:
 dist:	 $(EXECS) $(DOCS)
 	zip -9 mf2t-macos $(EXECS) $(DOCS)
 
-dist-x86-64:	 mac-x86-64 $(DOCS)
+dist-x86_64:	 mac-x86_64 $(DOCS)
 	zip -9 mf2t-macos-x86-64 $(EXECS) $(DOCS)
 
 dist-arm64:	 mac-arm64 $(DOCS)
 	zip -9 mf2t-macos-arm64 $(EXECS) $(DOCS)
 
-clean:
-	rm -f $(EXECS) *.o
+objclean:
+	rm -f *.o
 
-realclean:
-	rm -f $(EXECS) *.o mf2t mf2t.x86_64 mf2t.arm64 t2mf t2mf.x86_64 t2mf.arm64
+clean:
+	rm -f $(EXECS) *.o mf2t.x86_64 mf2t.arm64 t2mf.x86_64 t2mf.arm64
