@@ -1,0 +1,57 @@
+# -*- mode: makefile; -*-
+# makefile.nt,
+# with the assignment "CC=wcc386"
+# plus other minor modifications
+# This was used to cross compile for Windows-NT/XP executables on Linux.
+# Cross compiler downloaded from http://openwatcom.org/ftp/install/open-watcom-c-linux-1.9 or
+# https://sourceforge.net/projects/openwatcom/files/open-watcom-1.9/open-watcom-c-linux-1.9/download
+
+CFLAGS = -4 -bt=NT
+
+# If you have an old version of flex that defines yyleng
+# as a macro rather than a variable, uncomment the following line:
+# CFLAGS = -O -DNO_YYLENG_VAR
+# watcom c compiler
+CC=wcc386
+SYSTEM=SYSTEM nt
+
+SRCS =  mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
+       t2mf.fl t2mflex.c yyread.c \
+       README.TXT makefile.st makefile.unx makefile.bcc makefile.msc\
+       example1.mid example1.txt example2.mid example2.txt example3.mid \
+       example3.txt example4.mid example4.txt example5.mid example5.txt
+
+EXECS = mf2t.exe t2mf.exe
+DOCS = README.TXT LICENSE.TXT
+
+all:	$(EXECS)
+
+.c.o:
+	$(CC) $(CFLAGS) $<
+
+t2mf.exe:	midifile.o t2mf.o t2mf.h t2mflex.o
+	wlink name t2mf.exe $(SYSTEM) file { t2mf.o midifile.o t2mflex.o }
+
+# t2mflex.c: t2mf.fl
+# 	flex -is -Ce t2mf.fl
+# 	ren lex.yy.c t2mflex.c
+
+t2mflex.o: t2mflex.c t2mf.h
+
+mf2t.exe:	midifile.o mf2t.o
+	wlink name mf2t.exe $(SYSTEM) file { mf2t.o midifile.o }
+
+README.TXT: README
+	sed 's/$$/\r'/g < $< > $@
+
+LICENSE.TXT: License
+	sed 's/$$/\r'/g < $< > $@
+
+clean:
+	rm -f mf2t.exe t2mf.exe *.o
+
+zip:	$(SRCS) $(EXECS)
+	zip -9 mf2t $(SRCS) $(EXECS)
+
+dist:	 $(EXECS) $(DOCS)
+	zip -9 mf2t-windows $(EXECS) $(DOCS)
