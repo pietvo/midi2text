@@ -1,8 +1,8 @@
 # -*- mode: makefile; -*-
-# makefile.wcc ie,
+# makefile.wcc,
 # with the assignment "CC=wcc"
 # plus other minor modifications
-# This was used to cross compile MS-DOS executables on Linux.
+# This was used to cross compile for MS-DOS executables on Linux.
 # Cross compiler downloaded from http://openwatcom.org/ftp/install/open-watcom-c-linux-1.9 or
 # https://sourceforge.net/projects/openwatcom/files/open-watcom-1.9/open-watcom-c-linux-1.9/download
 
@@ -13,7 +13,7 @@ CFLAGS = -0 -bt=dos -zq
 # CFLAGS = -O -DNO_YYLENG_VAR
 # watcom c compiler
 CC=wcc
-LDFLAGS = -s
+SYSTEM=SYSTEM dos
 
 SRCS =  mf2t.c midifile.c midifile.h t2mf.c t2mf.h \
        t2mf.fl t2mflex.c yyread.c \
@@ -30,7 +30,7 @@ all:	$(EXECS)
 	$(CC) $(CFLAGS) $<
 
 t2mf.exe:	midifile.o t2mf.o t2mf.h t2mflex.o
-	wlink name t2mf.exe system dos file { t2mf.o midifile.o t2mflex.o }
+	wlink name t2mf.exe $(SYSTEM) file { t2mf.o midifile.o t2mflex.o }
 
 # t2mflex.c: t2mf.fl
 # 	flex -is -Ce t2mf.fl
@@ -39,7 +39,7 @@ t2mf.exe:	midifile.o t2mf.o t2mf.h t2mflex.o
 t2mflex.o: t2mflex.c t2mf.h
 
 mf2t.exe:	midifile.o mf2t.o
-	wlink name mf2t.exe system dos file { mf2t.o midifile.o }
+	wlink name mf2t.exe $(SYSTEM) file { mf2t.o midifile.o }
 
 README.TXT: README
 	sed 's/$$/\r'/g < $< > $@
