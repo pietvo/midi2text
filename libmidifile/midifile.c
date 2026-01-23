@@ -602,7 +602,6 @@ static void WriteVarLen(unsigned long value)
 static void mf_w_header_chunk(int format, int ntracks, int division)
 {
     unsigned long ident,length;
-    void write16bit(),write32bit();
     
     ident = MThd;           /* Head chunk identifier                    */
     length = 6;             /* Chunk length                             */
@@ -762,7 +761,6 @@ static void mf_w_track_chunk(int which_track, FILE *fp, void (*wtrack)())
 {
     unsigned long trkhdr,trklength;
     long offset, place_marker;
-    void write16bit(),write32bit();
 
     trkhdr = MTrk;
     trklength = 0;
@@ -784,8 +782,15 @@ static void mf_w_track_chunk(int which_track, FILE *fp, void (*wtrack)())
 
     /* Note: this calls Mf_writetempotrack with an unused parameter (-1)
        But this is innocent */
+    /* Update 2026-01-23;
+       Mf_writetempotrack is never set, so this really doesn't apply
+       unless a specific code for Mf_writetempotrack is added.
+       In the case when wtrack == Mf_wtrack, the implementation
+       doesn't use the track number. So we remove the argument for now.
+     */
 
-    (*wtrack)(which_track);
+/*    (*wtrack)(which_track); */
+    (*wtrack)();
 
     if (laststat != meta_event || lastmeta != end_of_track) {
         /* mf_write End of track meta event */

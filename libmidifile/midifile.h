@@ -46,14 +46,14 @@ MIDIFILE_PUBLIC void midifile(void);
 
 /* definitions for MIDI file writing code */
 MIDIFILE_PUBLIC extern int Mf_RunStat;
-MIDIFILE_PUBLIC extern int (*Mf_putc)();
+MIDIFILE_PUBLIC extern int (*Mf_putc)(int);
 MIDIFILE_PUBLIC extern void (*Mf_wtrack)();
 MIDIFILE_PUBLIC extern void (*Mf_wtempotrack)();
 MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long ticks, int division,
         unsigned int tempo);
 MIDIFILE_PUBLIC unsigned long mf_sec2ticks(float secs, int division,
         unsigned int tempo);
-MIDIFILE_PUBLIC void mfwrite();
+    MIDIFILE_PUBLIC void mfwrite(int, int, int, FILE*);
 MIDIFILE_PUBLIC int mf_w_midi_event(unsigned long delta_time,
         unsigned int type, unsigned int chan, unsigned char *data,
         unsigned long size);
