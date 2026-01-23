@@ -161,7 +161,7 @@ static void mytrend(void)
     --TrksToDo;
 }
 
-static void mynoteoff();
+static void mynoteoff(int, int, int);
 
 static void mynoteon(int chan, int pitch, int vol)
 {
