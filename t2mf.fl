@@ -8,11 +8,15 @@ int yylength;
 #define YY_USER_ACTION	yylength = yyleng
 #endif
 
+#define YY_SKIP_YYWRAP
+#define yywrap() 1
+
 int do_hex = 0;
 int eol_seen = 0;
 int lineno = 1;
 long yyval;
-long bankno();
+long bankno(char*, int);
+void error(const char*);
 
 %}
 

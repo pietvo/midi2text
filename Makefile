@@ -35,7 +35,7 @@ t2mf.o: midifile.h version.h getopt.h t2mf.c
 midifile.o: midifile.h midifile.c
 
 #t2mflex.c: t2mf.fl
-#	flex -is -Ce t2mf.fl
+#	flex -i -Ce t2mf.fl
 #	mv lex.yy.c t2mflex.c
 
 t2mflex.o: t2mflex.c t2mf.h
