@@ -1,6 +1,6 @@
-# This is a test for binary mode on MSDOS/Windows
+# This is a test for binary mode on MSDOS/Windows/Atari
 # t2mf bintest.txt bintest1.mid
-# bintest1.mid should be identical to bintest.txt
+# bintest1.mid should be identical to bintest.mid
 #
 MFile 0 1 96
 MTrk
