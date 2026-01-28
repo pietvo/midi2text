@@ -57,31 +57,31 @@
 
 /* Functions to be called while processing the MIDI file. */
 MIDIFILE_PUBLIC int (*Mf_getc)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_error)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_header)() = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_header)(int, int, int) = NULLFUNC;
 MIDIFILE_PUBLIC void (*Mf_starttrack)() = NULLFUNC;
 MIDIFILE_PUBLIC void (*Mf_endtrack)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_on)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_off)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_pressure)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_parameter)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_pitchbend)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_program)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_chanpressure)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_sysex)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_arbitrary)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_metamisc)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_seqnum)() = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_on)(int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_off)(int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_pressure)(int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_parameter)(int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_pitchbend)(int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_program)(int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_chanpressure)(int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_sysex)(int, char*) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_metamisc)(int, int, char*) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_sqspecific)(int, char*) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_seqnum)(int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_text)(int, int, char*) = NULLFUNC;
 MIDIFILE_PUBLIC void (*Mf_eot)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_smpte)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_tempo)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_timesig)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_keysig)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_sqspecific)() = NULLFUNC;
-MIDIFILE_PUBLIC void (*Mf_text)() = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_timesig)(int, int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_smpte)(int, int, int, int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_tempo)(long) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_keysig)(int, int) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_arbitrary)(int, char*) = NULLFUNC;
+MIDIFILE_PUBLIC void (*Mf_error)(char *) = NULLFUNC;
 
 /* Functions to implement in order to write a MIDI file */
-MIDIFILE_PUBLIC int (*Mf_putc)() = NULLFUNC;
+MIDIFILE_PUBLIC int (*Mf_putc)(int) = NULLFUNC;
 MIDIFILE_PUBLIC void (*Mf_wtrack)() = NULLFUNC;
 MIDIFILE_PUBLIC void (*Mf_wtempotrack)() = NULLFUNC;
 
