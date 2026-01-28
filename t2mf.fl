@@ -16,7 +16,7 @@ int eol_seen = 0;
 int lineno = 1;
 long yyval;
 long bankno(char*, int);
-void error(const char*);
+void myerror(const char*);
 
 %}
 
@@ -83,10 +83,10 @@ p(rog)?=	return PROG;
 <QUOTE>[^\\"\n]*	yymore();
 <QUOTE>\"		BEGIN (0); return STRING;
 <QUOTE>\\(.|\n)		yymore();
-<QUOTE>\n		{ error ("unterminated string");
+<QUOTE>\n		{ myerror ("unterminated string");
 			  lineno++; eol_seen++; BEGIN(0); return EOL;
 			}
-<QUOTE><<EOF>>		error ("EOF in string"); return EOF;
+<QUOTE><<EOF>>		myerror ("EOF in string"); return EOF;
 
 <INITIAL,HEX>\\[ \t\r]*\n	lineno++;
 <INITIAL,HEX>\n		lineno++; eol_seen++; BEGIN(0); return EOL;

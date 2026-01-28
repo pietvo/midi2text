@@ -38,7 +38,7 @@ static char *Pbmsg  = "Pb ch=%d v=%d\n";
 static char *PrChmsg = "PrCh ch=%d p=%d\n";
 static char *ChPrmsg = "ChPr ch=%d v=%d\n";
 
-static void error(char *s)
+static void myerror(char *s)
 {
     if (TrksToDo <= 0)
         fprintf(stderr, "Error: Garbage at end\n");
@@ -311,8 +311,8 @@ static void myarbitrary(int leng, char *mess)
 
 static void initfuncs(void)
 {
-    Mf_error = error;
     Mf_getc = getchar;
+    Mf_error = myerror;
     Mf_header =  myheader;
     Mf_starttrack =  mytrstart;
     Mf_endtrack =  mytrend;

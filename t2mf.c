@@ -58,7 +58,7 @@ static void checkprog();
 static void checkeol();
 static void gethex();
 
-void error(const char *s)
+void myerror(const char *s)
 {
     fprintf(stderr, "Error: %s\n", s);
 }
@@ -94,7 +94,7 @@ static int getint(char *mess)
     char ermesg[100];
     if (yylex() != INT) {
         sprintf(ermesg, "Integer expected for %s", mess);
-        error(ermesg);
+        myerror(ermesg);
         yyval = 0;
     }
     return yyval;
@@ -106,7 +106,7 @@ static int getbyte(char *mess)
     getint(mess);
     if (yyval < 0 || yyval > 127) {
         sprintf(ermesg, "Wrong value (%ld) for %s", yyval, mess);
-        error(ermesg);
+        myerror(ermesg);
         yyval = 0;
     }
     return yyval;
@@ -119,7 +119,7 @@ static void translate(void)
     /* Skip byte order mark */
     if ((c = getchar()) == 0xef) {
         if (getchar() != 0xbb || getchar() != 0xbf) {
-            error("Unknown byte order mark");
+            myerror("Unknown byte order mark");
             exit(1);
         }
     } else
@@ -146,7 +146,7 @@ static void checkchan(void)
 {
     if (yylex() != CH || yylex() != INT) syntax("ch=");
     if (yyval < 1 || yyval > 16)
-        error("Chan must be between 1 and 16");
+        myerror("Chan must be between 1 and 16");
     chan = yyval-1;
 }
 
@@ -186,7 +186,7 @@ static void checknote(void)
         yyval += 12 * atoi(p);
     }
     if (yyval < 0 || yyval > 127)
-        error("Note must be between 0 and 127");
+        myerror("Note must be between 0 and 127");
     data[0] = yyval;
 }
 
@@ -194,7 +194,7 @@ static void checkval(void)
 {
     if (yylex() != VAL || yylex() != INT) syntax("v= or vol= or val= <int>");
     if (yyval < 0 || yyval > 127)
-        error("Value must be between 0 and 127");
+        myerror("Value must be between 0 and 127");
     data[1] = yyval;
 }
 
@@ -202,7 +202,7 @@ static void splitval(void)
 {
     if (yylex() != VAL || yylex() != INT) syntax("v= or vol= or val= <int>");
     if (yyval < 0 || yyval > 16383)
-        error("Value must be between 0 and 16383");
+        myerror("Value must be between 0 and 16383");
     data[0] = yyval%128;
     data[1] = yyval/128;
 }
@@ -211,7 +211,7 @@ static void get16val(void)
 {
     if (yylex() != INT) syntax("<int>");
     if (yyval < 0 || yyval > 65535)
-        error("Value must be between 0 and 65535");
+        myerror("Value must be between 0 and 65535");
     data[0] = (yyval>>8)&0xff;
     data[1] = yyval&0xff;
 }
@@ -221,7 +221,7 @@ static void checkcon(void)
     if (yylex() != CON || yylex() != INT)
         syntax("c= or con= <int>");
     if (yyval < 0 || yyval > 127)
-        error("Controller must be between 0 and 127");
+        myerror("Controller must be between 0 and 127");
     data[0] = yyval;
 }
 
@@ -229,7 +229,7 @@ static void checkprog(void)
 {
     if (yylex() != PROG || yylex() != INT) syntax("p= or prog= <int>");
     if (yyval < 0 || yyval > 127)
-        error("Program number must be between 0 and 127");
+        myerror("Program number must be between 0 and 127");
     data[0] = yyval;
 }
 
@@ -257,7 +257,7 @@ static void gethex(void)
                 buffer = realloc(buffer, bufsiz);
             else
                 buffer = malloc(bufsiz);
-            if (! buffer) error("Out of memory");
+            if (! buffer) myerror("Out of memory");
         }
         while (i < yyleng-1) {
             c = yytext[i++];
@@ -299,11 +299,11 @@ rescan:
                     buffer = realloc(buffer, bufsiz);
                 else
                     buffer = malloc(bufsiz);
-                if (! buffer) error("Out of memory");
+                if (! buffer) myerror("Out of memory");
             }
 /* This test not applicable for sysex
             if (yyval < 0 || yyval > 127)
-                error("Illegal hex value"); */
+                myerror("Illegal hex value"); */
             buffer[buflen++] = yyval;
             c = yylex();
         } while (c == INT);
@@ -349,7 +349,7 @@ static void mywritetrack(void)
                 return;			/* PLB */
             case EOF:
                 err_cont = 0;
-                error("Unexpected EOF");
+                myerror("Unexpected EOF");
                 return;
             case TRKEND:
                 err_cont = 0;
@@ -436,7 +436,7 @@ static void mywritetrack(void)
                         cc = getbyte("clocks per click");
                         bb = getbyte("32nd notes per 24 clocks");
                         for (i = 0, k = 1 ; k < denom; i++, k <<= 1);
-                        if (k != denom) error ("Illegal TimeSig");
+                        if (k != denom) myerror ("Illegal TimeSig");
                         data[0] = nn;
                         data[1] = i;
                         data[2] = cc;
@@ -460,7 +460,7 @@ static void mywritetrack(void)
                     case KEYSIG:
                         data[0] = i = getint ("Keysig");
                         if (i < -7 || i > 7)
-                            error ("Key Sig must be between -7 and 7");
+                            myerror ("Key Sig must be between -7 and 7");
                         if ((c=yylex()) != MINOR && c != MAJOR)
                             syntax("minor or major");
                         data[1] = (c == MINOR);

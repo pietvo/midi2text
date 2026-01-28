@@ -921,7 +921,7 @@ int eol_seen = 0;
 int lineno = 1;
 long yyval;
 long bankno(char*, int);
-void error(const char*);
+void myerror(const char*);
 
 #line 926 "lex.yy.c"
 
@@ -1445,13 +1445,13 @@ case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
 #line 87 "t2mf.fl"
-{ error ("unterminated string");
+{ myerror ("unterminated string");
 			  lineno++; eol_seen++; BEGIN(0); return EOL;
 			}
 	YY_BREAK
 case YY_STATE_EOF(QUOTE):
 #line 90 "t2mf.fl"
-error ("EOF in string"); return EOF;
+myerror ("EOF in string"); return EOF;
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
