@@ -1,0 +1,11 @@
+For testing:
+
+./test.sh
+./check.sh
+
+The only difference should be the 4 lines of comment in bintest.t*
+
+./test-redir.sh
+./check.sh
+
+Same difference
