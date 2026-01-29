@@ -58,6 +58,14 @@ static void checkprog();
 static void checkeol();
 static void gethex();
 
+static int mygetchar() {
+    return getc(infile);
+}
+
+static int myputchar(int c) {
+    return putc(c, outfile);
+}
+
 void myerror(const char *s)
 {
     fprintf(stderr, "Error: %s\n", s);
@@ -117,13 +125,13 @@ static void translate(void)
     int c;
 
     /* Skip byte order mark */
-    if ((c = getchar()) == 0xef) {
-        if (getchar() != 0xbb || getchar() != 0xbf) {
+    if ((c = mygetchar()) == 0xef) {
+        if (mygetchar() != 0xbb || mygetchar() != 0xbf) {
             myerror("Unknown byte order mark");
             exit(1);
         }
     } else
-        ungetc(c, stdin);
+        ungetc(c, infile);
 
     if (yylex()==MTHD) {
         Format = getint("MFile format");
@@ -132,7 +140,7 @@ static void translate(void)
         if (Clicks < 0)
             Clicks = (Clicks&0xff)<<8|getint("MFile SMPTE division");
         checkeol();
-        mfwrite(Format, Ntrks, Clicks, stdout);
+        mfwrite(Format, Ntrks, Clicks, outfile);
     } else {
         fprintf(stderr, "Missing MFile – can’t continue\n");
         exit(1);
@@ -527,7 +535,7 @@ static void mywritetrack(void)
 
 static void initfuncs(void)
 {
-    Mf_putc = putchar;
+    Mf_putc = myputchar;
     Mf_wtrack = mywritetrack;
 }
 
@@ -568,22 +576,31 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Filename "-" indicates stdin */
+    infile = stdin;
+    /* Set infile to input file argument (text file) if given
+       Filename "-" indicates stdin
+    */
     if (optind < argc && strcmp(argv[optind++], "-") != 0
-                      && !freopen(argv[optind - 1], "r", stdin)) {
+                      && !(infile = fopen(argv[optind - 1], "r"))) {
         perror(argv[optind - 1]);
         exit(1);
     }
-    yyin = stdin;
+    yyin = infile;
 
-    /* Filename "-" indicates stdout */
-    if (optind < argc && strcmp(argv[optind], "-") != 0
-                      && !freopen(argv[optind], "w", stdout)) {
-        perror(argv[optind]);
-        exit(1);
-    }
+    outfile = stdout;
+    /* Set outfile to output file argument (midi file) if given
+       Filename "-" indicates stdout
+       Midi files are binary
+    */
+    if (optind < argc && strcmp(argv[optind], "-") != 0) {
+        if (!(outfile = fopen(argv[optind], "wb"))) {
+            perror(argv[optind]);
+            exit(1);
+        }
+    } else {
+/* Set stdout to binary on platforms where it matters */
 #if defined _WIN32 || defined MSDOS
-	setmode(fileno(stdout),O_BINARY);
+        setmode(fileno(outfile),O_BINARY);
 #endif
 
     initfuncs();
@@ -594,6 +611,9 @@ int main(int argc, char **argv)
     M0 = 0;
     T0 = 0;
     translate();
+
+    fclose(infile);
+    fclose(outfile);
 
     return 0;
 }

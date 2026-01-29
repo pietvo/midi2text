@@ -14,6 +14,7 @@
 #else
   #include <unistd.h>
 #endif
+
 #include <errno.h>
 #include "midifile.h"
 #include "version.h"
@@ -46,14 +47,18 @@ static void myerror(char *s)
         fprintf(stderr, "Error: %s\n", s);
 }
 
+static int mygetchar() {
+    return getc(infile);
+}
+
 static void prtime(void)
 {
     if (times) {
         long m = (Mf_currtime-T0)/Beat;
-        printf("%ld:%ld:%ld ",
+        fprintf(outfile, "%ld:%ld:%ld ",
                 m/Measure+M0, m%Measure, (Mf_currtime-T0)%Beat);
     } else
-        printf("%ld ",Mf_currtime);
+        fprintf(outfile, "%ld ",Mf_currtime);
 }
 
 static void prtext(unsigned char *p, int leng)
@@ -61,46 +66,46 @@ static void prtext(unsigned char *p, int leng)
     int n, c;
     int pos = 25;
 
-    printf("\"");
+    fprintf(outfile, "\"");
     for (n = 0; n < leng; n++) {
         c = *p++;
         if (fold && pos >= fold) {
-            printf("\\\n\t");
+            fprintf(outfile, "\\\n\t");
             pos = 13;	/* tab + \xab + \ */
             if (c == ' ' || c == '\t') {
-                putchar('\\');
+                putc('\\', outfile);
                 ++pos;
             }
         }
         switch (c) {
             case '\\':
             case '"':
-                printf("\\%c", c);
+                fprintf(outfile, "\\%c", c);
                 pos += 2;
                 break;
             case '\r':
-                printf("\\r");
+                fprintf(outfile, "\\r");
                 pos += 2;
                 break;
             case '\n':
-                printf("\\n");
+                fprintf(outfile, "\\n");
                 pos += 2;
                 break;
             case '\0':
-                printf("\\0");
+                fprintf(outfile, "\\0");
                 pos += 2;
                 break;
             default:
                 if (c >= 0x20) {
-                    putchar(c);
+                    putc(c, outfile);
                     ++pos;
                 } else {
-                    printf("\\x%02x" , c);
+                    fprintf(outfile, "\\x%02x" , c);
                     pos += 4;
                 }
         }
     }
-    printf("\"\n");
+    fprintf(outfile, "\"\n");
 }
 
 static void prhex(unsigned char *p,  int leng)
@@ -110,14 +115,14 @@ static void prhex(unsigned char *p,  int leng)
 
     for (n = 0; n < leng; n++, p++) {
         if (fold && pos >= fold) {
-            printf("\\\n\t%02x", *p);
+            fprintf(outfile, "\\\n\t%02x", *p);
             pos = 14;	/* tab + ab + " ab" + \ */
         } else {
-            printf(" %02x" , *p);
+            fprintf(outfile, " %02x" , *p);
             pos += 3;
         }
     }
-    printf("\n");
+    fprintf(outfile, "\n");
 }
 
 static char *mknote(int pitch)
@@ -137,10 +142,10 @@ static void myheader(int format, int ntrks, int division)
 {
     if (division & 0x8000) { /* SMPTE */
         times = 0; /* Can’t do beats */
-        printf("MFile %d %d %d %d\n",format,ntrks,
+        fprintf(outfile, "MFile %d %d %d %d\n",format,ntrks,
                 -((-(division>>8))&0xff), division&0xff);
     } else
-        printf("MFile %d %d %d\n",format,ntrks,division);
+        fprintf(outfile, "MFile %d %d %d\n",format,ntrks,division);
     if (format > 2) {
         fprintf(stderr, "Can’t deal with format %d files\n", format);
         exit (1);
@@ -151,13 +156,13 @@ static void myheader(int format, int ntrks, int division)
 
 static void mytrstart(void)
 {
-    printf("MTrk\n");
+    fprintf(outfile, "MTrk\n");
     TrkNr ++;
 }
 
 static void mytrend(void)
 {
-    printf("TrkEnd\n");
+    fprintf(outfile, "TrkEnd\n");
     --TrksToDo;
 }
 
@@ -170,7 +175,7 @@ static void mynoteon(int chan, int pitch, int vol)
         return;
     }
     prtime();
-    printf(Onmsg, chan+1, mknote(pitch), vol);
+    fprintf(outfile, Onmsg, chan+1, mknote(pitch), vol);
 }
 
 static void mynoteoff(int chan, int pitch, int vol)
@@ -180,57 +185,57 @@ static void mynoteoff(int chan, int pitch, int vol)
         return;
     }
     prtime();
-    printf(Offmsg, chan+1, mknote(pitch), vol);
+    fprintf(outfile, Offmsg, chan+1, mknote(pitch), vol);
 }
 
 static void mypressure(int chan, int pitch, int press)
 {
     prtime();
-    printf(PoPrmsg, chan+1, mknote(pitch), press);
+    fprintf(outfile, PoPrmsg, chan+1, mknote(pitch), press);
 }
 
 static void myparameter(int chan, int control, int value)
 {
     prtime();
-    printf(Parmsg, chan+1, control, value);
+    fprintf(outfile, Parmsg, chan+1, control, value);
 }
 
 static void mypitchbend(int chan, int lsb, int msb)
 {
     prtime();
-    printf(Pbmsg, chan+1, 128*msb+lsb);
+    fprintf(outfile, Pbmsg, chan+1, 128*msb+lsb);
 }
 
 static void myprogram(int chan, int program)
 {
     prtime();
-    printf(PrChmsg, chan+1, program);
+    fprintf(outfile, PrChmsg, chan+1, program);
 }
 
 static void mychanpressure(int chan, int press)
 {
     prtime();
-    printf(ChPrmsg, chan+1, press);
+    fprintf(outfile, ChPrmsg, chan+1, press);
 }
 
 static void mysysex(int leng, char *mess)
 {
     prtime();
-    printf("SysEx");
+    fprintf(outfile, "SysEx");
     prhex((unsigned char *)mess, leng);
 }
 
 static void mymmisc(int type, int leng, char *mess)
 {
     prtime();
-    printf("Meta 0x%02x",type);
+    fprintf(outfile, "Meta 0x%02x",type);
     prhex((unsigned char *)mess, leng);
 }
 
 static void mymspecial(int leng, char *mess)
 {
     prtime();
-    printf("SeqSpec");
+    fprintf(outfile, "SeqSpec");
     prhex((unsigned char *)mess, leng);
 }
 
@@ -251,36 +256,36 @@ static void mymtext(int type, int leng, char *mess)
 
     prtime();
     if (type < 1 || type > unrecognized)
-        printf("Meta 0x%02x ",type);
+        fprintf(outfile, "Meta 0x%02x ",type);
     else if (type == 3 && TrkNr == 1)
-        printf("Meta SeqName ");
+        fprintf(outfile, "Meta SeqName ");
     else
-        printf("Meta %s ",ttype[type]);
+        fprintf(outfile, "Meta %s ",ttype[type]);
     prtext((unsigned char *)mess, leng);
 }
 
 static void mymseq(int num)
 {
     prtime();
-    printf("SeqNr %d\n",num);
+    fprintf(outfile, "SeqNr %d\n",num);
 }
 
 static void mymeot(void)
 {
     prtime();
-    printf("Meta TrkEnd\n");
+    fprintf(outfile, "Meta TrkEnd\n");
 }
 
 static void mykeysig(int sf, int mi)
 {
     prtime();
-    printf("KeySig %d %s\n", (sf>127?sf-256:sf), (mi?"minor":"major"));
+    fprintf(outfile, "KeySig %d %s\n", (sf>127?sf-256:sf), (mi?"minor":"major"));
 }
 
 static void mytempo(long tempo)
 {
     prtime();
-    printf("Tempo %ld\n",tempo);
+    fprintf(outfile, "Tempo %ld\n",tempo);
 }
 
 static void mytimesig(int nn, int dd, int cc, int bb)
@@ -289,7 +294,7 @@ static void mytimesig(int nn, int dd, int cc, int bb)
     while (dd-- > 0)
         denom *= 2;
     prtime();
-    printf("TimeSig %d/%d %d %d\n", nn,denom,cc,bb);
+    fprintf(outfile, "TimeSig %d/%d %d %d\n", nn,denom,cc,bb);
     M0 += (Mf_currtime-T0)/(Beat*Measure);
     T0 = Mf_currtime;
     Measure = nn;
@@ -299,20 +304,20 @@ static void mytimesig(int nn, int dd, int cc, int bb)
 static void mysmpte(int hr, int mn, int se, int fr, int ff)
 {
     prtime();
-    printf("SMPTE %d %d %d %d %d\n", hr, mn, se, fr, ff);
+    fprintf(outfile, "SMPTE %d %d %d %d %d\n", hr, mn, se, fr, ff);
 }
 
 static void myarbitrary(int leng, char *mess)
 {
     prtime();
-    printf("Arb");
+    fprintf(outfile, "Arb");
     prhex ((unsigned char *)mess, leng);
 }
 
 static void initfuncs(void)
 {
-    Mf_getc = getchar;
     Mf_error = myerror;
+    Mf_getc = mygetchar;
     Mf_header =  myheader;
     Mf_starttrack =  mytrstart;
     Mf_endtrack =  mytrend;
@@ -397,19 +402,30 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Filename "-" indicates stdin */
-    if (optind < argc && strcmp(argv[optind++], "-") != 0
-                      && !freopen(argv[optind - 1], "rb", stdin)) {
-        perror(argv[optind - 1]);
-        exit(1);
-    } 
+    infile = stdin;
+    /* Set infile to input file argument (midi file) if given
+       Filename "-" indicates stdin
+       Midi files are binary
+    */
+    if (optind < argc && strcmp(argv[optind++], "-") != 0) {
+        if (!(infile = fopen(argv[optind - 1], "rb"))) {
+            perror(argv[optind - 1]);
+            exit(1);
+        }
+    } else {
+        /* Set stdin to binary on platforms where it matters */
 #if defined _WIN32 || defined MSDOS
-	setmode(fileno(stdin),O_BINARY);
+        setmode(fileno(infile),O_BINARY);
 #endif
+#endif
+    }
 
-    /* Filename "-" indicates stdout */
+    outfile = stdout;
+    /* Set outfile to output file argument (text file) if given
+       Filename "-" indicates stdout
+    */
     if (optind < argc && strcmp(argv[optind], "-") != 0
-                      && !freopen(argv[optind], "w", stdout)) {
+                      && !(outfile = fopen(argv[optind], "w"))) {
         perror(argv[optind]);
         exit(1);
     }
@@ -422,6 +438,9 @@ int main(int argc, char **argv)
     T0 = 0;
     M0 = 0;
     mfread();
+
+    fclose(infile);
+    fclose(outfile);
 
     return 0;
 }

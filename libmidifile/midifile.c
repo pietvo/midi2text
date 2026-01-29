@@ -90,6 +90,9 @@ MIDIFILE_PUBLIC int Mf_nomerge = 0;
 /* current time in delta‐time units */
 MIDIFILE_PUBLIC long Mf_currtime = 0L;
 
+MIDIFILE_PUBLIC FILE* infile = 0;
+MIDIFILE_PUBLIC FILE* outfile = 0;
+
 /* private stuff */
 static long Mf_toberead = 0L;
 static long Mf_numbyteswritten = 0L;
@@ -113,7 +116,7 @@ static int egetc(void) /* read a single character and abort on EOF */
 {
     int c = (*Mf_getc)();
 
-    if ((c == EOF) || feof(stdin))
+    if ((c == EOF) || feof(infile))
         mferror("premature EOF");
     Mf_toberead--;
     return(c);
@@ -770,7 +773,7 @@ static void mf_w_track_chunk(int which_track, FILE *fp, void (*wtrack)())
     offset = ftell(fp); 
 
 #ifdef DEBUG
-    printf("offset = %d\n",(int) offset);
+    fprintf(outfile, "offset = %d\n",(int) offset);
 #endif
 
     /* Write the track chunk header */
@@ -813,7 +816,7 @@ static void mf_w_track_chunk(int which_track, FILE *fp, void (*wtrack)())
     /* track.length = place_marker - offset - (long) sizeof(track); */
 
 #ifdef DEBUG
-    printf("length = %d\n",(int) trklength);
+    fprintf(outfile, "length = %d\n",(int) trklength);
 #endif
 
     if (fseek(fp,offset,0) < 0)

@@ -15,6 +15,9 @@ extern "C" {
 #define MIDIFILE_PUBLIC
 #endif
 
+MIDIFILE_PUBLIC extern FILE* infile;
+MIDIFILE_PUBLIC extern FILE* outfile;
+
 /* definitions for MIDI file parsing code */
 MIDIFILE_PUBLIC extern int (*Mf_getc)();
 MIDIFILE_PUBLIC extern void (*Mf_header)(int, int, int);
