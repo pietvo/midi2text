@@ -20,9 +20,6 @@
 #include "t2mf.h"
 #include "version.h"
 
-
-extern int optind;
-
 #ifdef NO_YYLENG_VAR
 #define	yyleng yylength
 #endif
