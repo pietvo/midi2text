@@ -9,6 +9,7 @@
 # "make -f makefile.mac dist" make a distribution zip file for MacOS universal
 # "make -f makefile.mac dist-x86_64" make a distribution zip file for MacOS x86_64
 # "make -f makefile.mac dist-arm64" make a distribution zip file for MacOS arm64
+# Before making a "dist", first make clean and make the correspoinding executables.
 
 CC = clang
 CFLAGS = -O
@@ -80,7 +81,7 @@ source:
 	zip -9 mf2tsrc $(SRCS)
 
 dist:	 $(EXECS) $(DOCS)
-	zip -9 mf2t-macos $(EXECS) $(DOCS)
+	zip -9 mf2t-macos-universal $(EXECS) $(DOCS)
 
 dist-x86_64:	 mac-x86_64 $(DOCS)
 	zip -9 mf2t-macos-x86-64 $(EXECS) $(DOCS)
