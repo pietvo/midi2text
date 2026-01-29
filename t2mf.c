@@ -11,6 +11,8 @@
   #include <io.h>
   #include <fcntl.h>
   #include "getopt.h"
+#elif defined ATARIST
+  #include "getopt.h"
 #else
   #include <unistd.h>
 #endif
