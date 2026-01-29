@@ -419,6 +419,10 @@ int main(int argc, char **argv)
 #if defined _WIN32 || defined MSDOS
         setmode(fileno(infile),O_BINARY);
 #endif
+#ifdef ATARIST
+        if (!(infile = fdopen(fileno(stdin), "rb"))) {
+            perror("Can't set stdin to binary mode\n");
+        }
 #endif
     }
 

@@ -601,6 +601,12 @@ int main(int argc, char **argv)
 #if defined _WIN32 || defined MSDOS
         setmode(fileno(outfile),O_BINARY);
 #endif
+#ifdef ATARIST
+        if (!(outfile = fdopen(fileno(stdout), "wb"))) {
+          perror("Can't set stdout to binary mode\n");
+        }
+#endif
+    }
 
     initfuncs();
     TrkNr = 0;

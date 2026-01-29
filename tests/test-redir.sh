@@ -1,3 +1,4 @@
+rm -f *.test *.mmm *.ttt
 echo '../mf2t  bintest.mid bintest.test'
 ../mf2t  bintest.mid bintest.test
 echo '../mf2t example1.mid example1.test'
@@ -13,12 +14,12 @@ echo '../mf2t example5.mid example5.test'
 
 echo '../t2mf <  bintest.txt > bintest.mmm'
 ../t2mf <  bintest.txt > bintest.mmm
-echo '../t2mf < example1.txt > example1.mmm'
-../t2mf < example1.txt > example1.mmm
-echo '../t2mf < example2.txt > example2.mmm'
-../t2mf < example2.txt > example2.mmm
-echo '../t2mf < example3.txt > example3.mmm'
-../t2mf < example3.txt > example3.mmm
+echo '../t2mf - < example1.txt > example1.mmm'
+../t2mf - < example1.txt > example1.mmm
+echo '../t2mf - - < example2.txt > example2.mmm'
+../t2mf - - < example2.txt > example2.mmm
+echo '../t2mf - example3.mmm < example3.txt'
+../t2mf - example3.mmm < example3.txt
 echo '../t2mf < example4.txt > example4.mmm'
 ../t2mf < example4.txt > example4.mmm
 echo '../t2mf < example5.txt > example5.mmm'
@@ -27,11 +28,11 @@ echo '../t2mf < example5.txt > example5.mmm'
 echo '../mf2t <  bintest.mmm > bintest.ttt'
 ../mf2t <  bintest.mmm > bintest.ttt
 echo '../mf2t < example1.mmm > example1.ttt'
-../mf2t < example1.mmm > example1.ttt
-echo '../mf2t < example2.mmm > example2.ttt'
-../mf2t < example2.mmm > example2.ttt
-echo '../mf2t < example3.mmm > example3.ttt'
-../mf2t < example3.mmm > example3.ttt
+../mf2t example1.mmm > example1.ttt
+echo '../mf2t - example2.ttt < example2.mmm'
+../mf2t - example2.ttt < example2.mmm
+echo '../mf2t - - < example3.mmm > example3.ttt'
+../mf2t - - < example3.mmm > example3.ttt
 echo '../mf2t < example4.mmm > example4.ttt'
 ../mf2t < example4.mmm > example4.ttt
 echo '../mf2t < example5.mmm > example5.ttt'

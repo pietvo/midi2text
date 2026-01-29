@@ -1,3 +1,4 @@
+rm -f *.test *.mmm *.ttt
 echo '../mf2t  bintest.mid bintest.test'
 ../mf2t  bintest.mid bintest.test
 echo '../mf2t example1.mid example1.test'
