@@ -40,6 +40,7 @@
  *
  * Options may be concatenated, for instance, using the options argument
  * given above: -cd will treat c and d as options.  -cda<argument> also works.
+ * This version will treat '-' as a file name, not an option.
  * 
  * Unknown options will generate an error message and return '?'.
  *
@@ -67,6 +68,9 @@ int getopt(int argc, char **argv, char *optstring)
 		    if (*pv != '-') 
 			return(-1);
 		}
+        if (!strcmp(pv, "-")) { /* '-' = stdin/stdout */
+            return(-1);
+        }
         if (!strcmp(pv, "--")) { /* '--' = end of options */
             optind++;
             return(-1);
