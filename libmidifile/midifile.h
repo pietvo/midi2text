@@ -4,6 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include <stdio.h>
 
 #if defined BUILDING_MIDIFILE && defined __CYGWIN__
 #define MIDIFILE_PUBLIC __declspec(dllexport)
@@ -52,20 +53,16 @@ MIDIFILE_PUBLIC extern int Mf_RunStat;
 MIDIFILE_PUBLIC extern int (*Mf_putc)(int);
 MIDIFILE_PUBLIC extern void (*Mf_wtrack)();
 MIDIFILE_PUBLIC extern void (*Mf_wtempotrack)();
-MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long ticks, int division,
-        unsigned int tempo);
-MIDIFILE_PUBLIC unsigned long mf_sec2ticks(float secs, int division,
-        unsigned int tempo);
-    MIDIFILE_PUBLIC void mfwrite(int, int, int, FILE*);
-MIDIFILE_PUBLIC int mf_w_midi_event(unsigned long delta_time,
-        unsigned int type, unsigned int chan, unsigned char *data,
-        unsigned long size);
-MIDIFILE_PUBLIC int mf_w_meta_event(unsigned long delta_time,
-        unsigned char type, unsigned char *data, unsigned long size);
-MIDIFILE_PUBLIC int mf_w_sysex_event(unsigned long delta_time,
-        unsigned char *data, unsigned long size);
-MIDIFILE_PUBLIC void mf_w_tempo(unsigned long delta_time,
-        unsigned long tempo);
+MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long, int, unsigned int);
+MIDIFILE_PUBLIC unsigned long mf_sec2ticks(float, int, unsigned int);
+MIDIFILE_PUBLIC void mfwrite(int, int, int, FILE*);
+MIDIFILE_PUBLIC int mf_w_midi_event(unsigned long, unsigned int,
+        unsigned int, unsigned char*, unsigned long);
+MIDIFILE_PUBLIC int mf_w_meta_event(unsigned long,
+        unsigned char, unsigned char*, unsigned long);
+MIDIFILE_PUBLIC int mf_w_sysex_event(unsigned long,
+        unsigned char*, unsigned long);
+MIDIFILE_PUBLIC void mf_w_tempo(unsigned long, unsigned long);
 
 /* MIDI status commands most significant bit is 1 */
 #define note_off                0x80
