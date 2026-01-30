@@ -53,8 +53,10 @@ MIDIFILE_PUBLIC extern int Mf_RunStat;
 MIDIFILE_PUBLIC extern int (*Mf_putc)(int);
 MIDIFILE_PUBLIC extern void (*Mf_wtrack)();
 MIDIFILE_PUBLIC extern void (*Mf_wtempotrack)();
+/*
 MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long, int, unsigned int);
 MIDIFILE_PUBLIC unsigned long mf_sec2ticks(float, int, unsigned int);
+*/
 MIDIFILE_PUBLIC void mfwrite(int, int, int, FILE*);
 MIDIFILE_PUBLIC int mf_w_midi_event(unsigned long, unsigned int,
         unsigned int, unsigned char*, unsigned long);

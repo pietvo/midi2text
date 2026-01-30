@@ -183,6 +183,8 @@ static int read16bit(void)
  * based on notes and tracks based on SMPTE times.
  *
  */
+
+/*
 MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long ticks, int division,
         unsigned int tempo)
 {
@@ -197,14 +199,15 @@ MIDIFILE_PUBLIC float mf_ticks2sec(unsigned long ticks, int division,
         return (float) ((float) ticks / (smpte_format * smpte_resolution *
                 1000000.0));
     }
-} /* end of ticks2sec() */
-
+}
+*/ /* end of ticks2sec() */
+/*
 MIDIFILE_PUBLIC unsigned long mf_sec2ticks(float secs, int division,
         unsigned int tempo)
 {    
      return (long)(((secs * 1000.0) / 4.0 * division) / tempo);
 }
-
+*/
 /* The code below allows collection of a system exclusive message of */
 /* arbitrary length.  The Msgbuff is expanded as necessary.  The only */
 /* visible data/routines are msginit(), msgadd(), msg(), msgleng(). */
