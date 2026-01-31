@@ -1,3 +1,4 @@
+# -*-makefile-*-
 # Makefile
 # This is the Makefile for Atari ST
 # It uses the m68k-atari-mint-gcc cross compiler.

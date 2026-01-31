@@ -1,4 +1,4 @@
-# Makefile
+# -*-makefile-*-
 # This is the basic Makefile for Unix-like systems
 # It works for Linux and MacOS
 
