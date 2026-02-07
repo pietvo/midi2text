@@ -149,7 +149,7 @@ static void myheader(int format, int ntrks, int division)
     } else
         fprintf(outfile, "MFile %d %d %d\n",format,ntrks,division);
     if (format > 2) {
-        fprintf(stderr, "Can’t deal with format %d files\n", format);
+        fprintf(stderr, "Can't deal with format %d files\n", format);
         exit (1);
     }
     Beat = Clicks = division;

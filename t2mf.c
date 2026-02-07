@@ -141,7 +141,7 @@ static void translate(void)
         checkeol();
         mfwrite(Format, Ntrks, Clicks, outfile);
     } else {
-        fprintf(stderr, "Missing MFile – can’t continue\n");
+        fprintf(stderr, "Missing MFile - can't continue\n");
         exit(1);
     }
 }

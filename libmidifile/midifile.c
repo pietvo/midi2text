@@ -434,7 +434,7 @@ static int readtrack(void) /* read a track chunk */
         c = egetc();
 
         if (sysexcontinue && c != 0xf7)
-            mferror("didn’t find expected continuation of a sysex");
+            mferror("didn't find expected continuation of a sysex");
 
         if ((c & 0x80) == 0) {   /* running status? */
             if (status == 0)
