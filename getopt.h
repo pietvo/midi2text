@@ -55,7 +55,7 @@ int optind = 1;
 char *optarg;
 char *pvcon = NULL;
 
-int getopt(int argc, char **argv, char *optstring)
+int getopt(int argc, char * const argv[], const char *optstring)
 {
     char *pv, *flgp;
     while (optind < argc) {
