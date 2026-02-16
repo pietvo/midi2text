@@ -7,7 +7,8 @@
 # Here it is assumed that it is installed in /opt/cross-mint/.
 # If you have it in a different place, make sure that it is in your PATH.
 
-# By default the executables are compiled with libcmini.
+# By default the executables are compiled with libcmini
+# from https://github.com/freemint/libcmini.
 # This is controlled by the variable LIBCMINI
 # libcmini gives much smaller executables (4-5 times smaller).
 # It can be downloaded from https://github.com/freemint/libcmini
