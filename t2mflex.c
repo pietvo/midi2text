@@ -1,5 +1,6 @@
+#line 1 "t2mflex.c"
 
-#line 2 "lex.yy.c"
+#line 3 "t2mflex.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -923,9 +924,9 @@ long yyval;
 long bankno(char*, int);
 void myerror(const char*);
 
-#line 926 "lex.yy.c"
+#line 927 "t2mflex.c"
 
-#line 928 "lex.yy.c"
+#line 929 "t2mflex.c"
 
 #define INITIAL 0
 #define QUOTE 1
@@ -1153,7 +1154,7 @@ YY_DECL
 	}
 	eol_seen = 0;
 		
-#line 1156 "lex.yy.c"
+#line 1157 "t2mflex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1495,7 +1496,7 @@ YY_RULE_SETUP
 #line 102 "t2mf.fl"
 ECHO;
 	YY_BREAK
-#line 1498 "lex.yy.c"
+#line 1499 "t2mflex.c"
 
 	case YY_END_OF_BUFFER:
 		{
