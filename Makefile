@@ -5,9 +5,10 @@
 CFLAGS = -O
 LDFLAGS =
 
-SRCS = mf2t.c t2mf.c t2mf.h t2mf.fl t2mflex.c yyread.c getopt.h version.h \
-	$(wildcard libmidifile/midifile.* libmidifile/Make*) libmidifile/README \
-     Makefile $(wildcard makefile.*) $(wildcard tests/*) 
+SRCS = mf2t.c t2mf.c t2mf.h t2mf.fl t2mflex.c t2mflex-atari.c yyread.c getopt.h version.h \
+	midifile.c midifile.h README License \
+	$(wildcard libmidifile/midifile.[ch3] libmidifile/Make*) libmidifile/README libmidifile/midifile.txt \
+    $(wildcard [Mm]akefile*) $(wildcard tests/*)
 
 DOCS = README License
 
@@ -39,11 +40,11 @@ midifile.o: midifile.h midifile.c
 
 t2mflex.o: t2mflex.c t2mf.h
 
-source:
-	zip -9 mf2tsrc $(SRCS)
 test: all
 	cd tests; make test
 
+source: clean
+	zip -9 --symlinks mf2tsrc $(SRCS)
 
 dist:	 $(EXECS) $(DOCS)
 	zip -9 mf2t $(EXECS) $(DOCS)
