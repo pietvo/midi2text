@@ -1,0 +1,22 @@
+bintest.test
+0a1,4
+> # This is a test for binary mode on MSDOS/Windows/Atari
+> # t2mf bintest.txt bintest1.mid
+> # bintest1.mid should be identical to bintest.mid
+> #
+example1.test
+example2.test
+example3.test
+example4.test
+example5.test
+bintest.ttt
+0a1,4
+> # This is a test for binary mode on MSDOS/Windows/Atari
+> # t2mf bintest.txt bintest1.mid
+> # bintest1.mid should be identical to bintest.mid
+> #
+example1.ttt
+example2.ttt
+example3.ttt
+example4.ttt
+example5.ttt

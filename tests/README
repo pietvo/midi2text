@@ -3,9 +3,10 @@ For testing:
 ./test.sh
 ./check.sh
 
-The only difference should be the 4 lines of comment in bintest.t*
+This should output: TEST OK
 
 ./test-redir.sh
 ./check.sh
 
-Same difference
+Same.
+Or run: make test

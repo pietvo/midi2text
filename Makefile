@@ -41,9 +41,13 @@ t2mflex.o: t2mflex.c t2mf.h
 
 source:
 	zip -9 mf2tsrc $(SRCS)
+test: all
+	cd tests; make test
+
 
 dist:	 $(EXECS) $(DOCS)
 	zip -9 mf2t $(EXECS) $(DOCS)
 
 clean:
+	cd tests; make clean
 	rm -f $(EXECS) $(OBJS) $(LIBS) mf2tsrc.zip mf2t.zip
