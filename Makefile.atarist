@@ -1,22 +1,40 @@
-# -*-makefile-*-
-# Makefile
+# -*-Makefile-*-
 # This is the Makefile for Atari ST
 # It uses the m68k-atari-mint-gcc cross compiler.
 
-# Use docker image as described on
-# https://www.fxjavadevblog.fr/c-programming-for-atari-st-with-docker/
-# Note: install the Dockerfile as described on that page.
-# Or download the compiler from http://vincent.riviere.free.fr/soft/m68k-atari-mint/
-# Command:
-# docker run -it -u $(id -u):$(id -g) -v $(pwd):/app fxrobin/m68k-compiler make -f Makefile.atarist
+# Download the compiler from http://vincent.riviere.free.fr/soft/m68k-atari-mint/
+# Mac version: https://donzé.ch/atari/articles/cross-compiler/
+# Here it is assumed that it is installed in /opt/cross-mint/.
+# If you have it in a different place, make sure that it is in your PATH.
 
+# By default the executables are compiled with libcmini.
+# This is controlled by the variable LIBCMINI
+# libcmini gives much smaller executables (4-5 times smaller).
+# It can be downloaded from https://github.com/freemint/libcmini
+# It is assumed that libcmini is installed in /opt/libcmini
+# I use a version of libcmini that is compiled with -DSTDIO_MAP_NEWLINE
+# so that NL is translated to CR NL on output and v.v. on input.
+# If perror is not included in libcmini, use the included perror.c.
+
+# If you don't want to use libcmini, use `make LIBCMINI=no' or `make LIBCMINI=N'
+# If you have libcmini in a different location, use `make LIBCMINI=/your/location'
+
+export PATH := /opt/cross-mint/bin/:"$(PATH)"
+LIBCMINI = /opt/libcmini
 # Compiler 
 CC = m68k-atari-mint-gcc
 
-CFLAGS = -O -DATARIST
-LDFLAGS = -s
+ifneq (,$(filter $(LIBCMINI),N NO n no))
+    CFLAGS = -O -DATARIST
+    LDFLAGS = -s
+    LDLIBS =
+else
+    CFLAGS = -O -DATARIST -I $(LIBCMINI)/include
+    LDFLAGS = -s -nostdlib $(LIBCMINI)/lib/crt0.o
+    LDLIBS = -L $(LIBCMINI)/lib -lgcc -lcmini -lgcc
+endif
 
-SRCS = mf2t.c t2mf.c t2mf.h t2mf.fl t2mflex.c yyread.c getopt.h version.h \
+SRCS = mf2t.c t2mf.c t2mf.h t2mf.fl t2mflex-atari.c yyread.c getopt.h version.h \
 	$(wildcard libmidifile/midifile.* libmidifile/Make*) libmidifile/README \
      Makefile $(wildcard makefile.*) $(wildcard tests/*) 
 
@@ -34,22 +52,24 @@ OBJS = $(MF2TOBJS) $(T2MFOBJS)
 all: $(EXECS)
 
 mf2t.ttp: $(MF2TOBJS) $(LIBS)
-	$(CC) $(LDFLAGS) -o mf2t.ttp $(MF2TOBJS) $(LIBS)
+	$(CC) -o mf2t.ttp $(LDFLAGS) $(MF2TOBJS) $(LIBS) $(LDLIBS)
 
 mf2t.o: midifile.h version.h getopt.h mf2t.c
 
 t2mf.ttp: $(T2MFOBJS) $(LIBS)
-	$(CC) $(LDFLAGS) -o t2mf.ttp $(T2MFOBJS) $(LIBS)
+	$(CC) -o t2mf.ttp $(LDFLAGS) $(T2MFOBJS) $(LIBS) $(LDLIBS)
 
 t2mf.o: midifile.h version.h getopt.h t2mf.c
 
 midifile.o: midifile.h midifile.c
 
+# Use the included t2mflex-atari.c; a generated one doesn't compile
+# for the Atari.
 #t2mflex.c: t2mf.fl
-#	flex -i -Ce t2mf.fl
-#	mv lex.yy.c t2mflex.c
+#	flex -i -Ce -o t2mflex.c t2mf.fl
 
-t2mflex.o: t2mflex.c t2mf.h
+t2mflex.o: t2mflex-atari.c t2mf.h
+	$(CC) $(CFLAGS) -c -o t2mflex.o t2mflex-atari.c
 
 README.TXT: README
 	sed 's/$$/\r'/g < $< > $@

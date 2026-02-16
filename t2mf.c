@@ -12,10 +12,9 @@
   #include <fcntl.h>
   #include "getopt.h"
 #elif defined ATARIST
-  #include "getopt.h"
-#else
-  #include <unistd.h>
+  #include <getopt.h>
 #endif
+#include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
 #include <setjmp.h>
@@ -57,8 +56,20 @@ static void checkprog();
 static void checkeol();
 static void gethex();
 
-static int mygetchar() {
-    return getc(infile);
+#ifdef ATARIST
+static int read_from_tty = 0;
+#endif
+
+int mygetchar() {
+    int c = getc(infile);
+#ifdef ATARIST
+    if (read_from_tty) {
+        /* On Atari interpret CTRL-C and CTRL-Z if reading from keyboard */
+        if (c == 3) exit(2);     /* CTRL-C = interrupt */
+        if (c == 26) return EOF; /* CTRL-Z = end of file */
+    }
+#endif
+    return c;
 }
 
 static int myputchar(int c) {
@@ -585,6 +596,9 @@ int main(int argc, char **argv)
         exit(1);
     }
     yyin = infile;
+#ifdef ATARIST
+    read_from_tty = isatty(fileno(infile));
+#endif
 
     outfile = stdout;
     /* Set outfile to output file argument (midi file) if given

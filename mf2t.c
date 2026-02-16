@@ -7,14 +7,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #if defined _WIN32 || defined MSDOS
   #include <io.h>
   #include <fcntl.h>
   #include "getopt.h"
 #elif defined ATARIST
-  #include "getopt.h"
-#else
-  #include <unistd.h>
+  #include <getopt.h>
 #endif
 
 #include <errno.h>
@@ -49,8 +48,20 @@ static void myerror(char *s)
         fprintf(stderr, "Error: %s\n", s);
 }
 
-static int mygetchar() {
-    return getc(infile);
+#ifdef ATARIST
+static int read_from_tty = 0;
+#endif
+
+int mygetchar() {
+    int c = getc(infile);
+#ifdef ATARIST
+    if (read_from_tty) {
+        /* On Atari interpret CTRL-C and CTRL-Z if reading from keyboard */
+        if (c == 3) exit(2);     /* CTRL-C = interrupt */
+        if (c == 26) return EOF; /* CTRL-Z = end of file */
+    }
+#endif
+    return c;
 }
 
 static void prtime(void)
@@ -425,6 +436,10 @@ int main(int argc, char **argv)
         }
 #endif
     }
+
+#ifdef ATARIST
+    read_from_tty = isatty(fileno(infile));
+#endif
 
     outfile = stdout;
     /* Set outfile to output file argument (text file) if given

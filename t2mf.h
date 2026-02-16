@@ -48,4 +48,13 @@
 #define TIMESIG	(META+1+time_signature)
 #define SMPTE	(META+1+smpte_offset)
 
+#ifdef ATARIST
+extern int mygetchar();
+
+#define YY_INPUT(buf,result,max_size) \
+    { \
+    int c = mygetchar(); \
+    result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
+    }
+#endif
 #endif
