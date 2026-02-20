@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #if defined _WIN32 || defined MSDOS
   #include <io.h>
   #include <fcntl.h>
@@ -14,7 +15,6 @@
 #elif defined ATARIST
   #include <getopt.h>
 #endif
-#include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
 #include <setjmp.h>
